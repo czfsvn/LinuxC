@@ -1,0 +1,19 @@
+CC = g++
+LIBS = -L/usr/lib/mysql -lmysqlclient -lz
+INCL = -I/usr/local/mysql/include
+RM = /bin/rm -f
+CFLAGS = -g -rdynamic -Wall
+
+
+SOURCES := $(wildcard *.cpp)
+TARGETS := $(patsubst %.cpp, %, $(SOURCES))
+
+all: $(TARGETS)
+
+%: %.cpp
+	$(CC)  -o $@  $(CFLAGS) $< $(INCL) $(LIBS)
+
+clean:
+	$(RM) $(DEPENDS) $(TARGETS) *.o
+
+

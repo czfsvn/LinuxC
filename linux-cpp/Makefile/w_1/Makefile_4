@@ -1,0 +1,18 @@
+#注释
+
+CC = g++
+RM = /bin/rm -f
+OBJECT = Main.o \
+		 Test.o \
+		 Orgin.o
+
+Main: $(OBJECT)
+	$(CC)	-o	Main	$(OBJECT)
+
+Main.o:	Test.h
+Test.o:	Orgin.o
+Orgin.o:Orgin.h
+
+clean:
+	$(RM)	Main $(OBJECT)
+

@@ -1,0 +1,19 @@
+RM = /bin/rm -f
+CC = g++
+
+all: hello
+
+hello : main.o factorial.o hello.o
+	$(CC) main.o hello.o factorial.o -o hello
+
+main.o:	main.cpp
+	$(CC) -c main.cpp
+
+factorial.o: factorial.cpp
+	$(CC) -c factorial.cpp
+
+hello.o: hello.cpp
+	$(CC) -c hello.cpp
+
+clean:
+	$(RM) all hello *o

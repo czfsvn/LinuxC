@@ -1,0 +1,13 @@
+#注释行
+Main:	Main.o Test.o
+	g++	-o	Main.o Test.o
+
+Main.o:	Main.cpp Test.h
+	g++ -c	Main.cpp
+
+Test.o:	Test.cpp Test.h Orgin.o
+	g++ -c	Test.cpp
+
+Orgin.o:	Orgin.cpp Orgin.h
+	g++ -c	Orgin.cpp
+

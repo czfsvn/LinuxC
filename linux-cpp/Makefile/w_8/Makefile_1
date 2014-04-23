@@ -1,0 +1,29 @@
+
+
+#CXX = /usr/bin/g++
+CXXFLAGS = $(ZEBRA_COMPILE_OPT) -I../base -I../ZT2Share/Code/Command -Wall _D_GNU_SOURCE -D_REENTRANT 'mysql_config --cflags' 'xml2-config --cflags' 'freetype-config --cflags'
+
+CXXLFLAGS = $(ZEBRA_COMPILE_OPT) -Wall -L../base -lzebra -lencdec -lpthread -lrt -lz 'mysql-config --libs_r' 'xml2-config --libs' -llog4cxx -lgd -ldl -LHProtect'freetype-config --libs'
+
+LIB_ZEBRA = ../base/libzebra.a
+
+OBJS =
+SRCS = $(OBJS:%.o=%.cpp)
+DEPS = $(OBJS:%.o=%.o)
+
+ALL_TARGET = GATE
+
+all : $(ALL_TARGET)
+
+include $(DEPS)
+$(DEPS): .%.d: %.cpp
+	@$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@,$$$$ > $@; rm -f $@.$$$$
+
+$(OBJS): %.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $< -o $@
+
+$(ALL_TARGET) : $(OBJS) $(LIB_ZEBRA)
+	$(CXX) $(OBJS) -o $@ $(CXXLFLAGS)
+
+clean:
+	@rm -rf *.o $(ALL_TARGET) cor *~

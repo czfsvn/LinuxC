@@ -1,0 +1,20 @@
+CC = g++
+LIBS = -L/usr/lib/mysql -lmysqlclient -lz
+INCLUDE = -I/usr/local/mysql/include
+RM = /bin/rm -f
+CFLAGS = -g -Wall
+
+OBJS = Main.o DBMgr.o DBSimple.o
+TARGET = Main
+
+$(TARGET): $(OBJS)
+	$(CC)  $(INCLUDE) -o $@ $(OBJS) $(LIBS)
+
+..cpp.o:
+	$(CC) -c $< $?
+
+
+clean:
+	$(RM) $(OBJS) $(TARGET)
+
+

@@ -1,0 +1,27 @@
+RM = /bin/rm -f
+CP = /bin/cp
+
+CC = g++
+
+CPPFLAGS =  -g -rdynamic -Wall -D_REENTRANT
+
+LIBS = -L -lrt  -ldl
+INCL = -I -lmysqlclient -lz
+
+SOURCES      := $(wildcard *.cpp)
+TARGETS      := $(patsubst %.cpp, %, $(SOURCES))
+
+all: $(TARGETS)
+
+%: %.cpp
+	$(CC)  -o $@  $(CPPFLAGS) $< $(INCL) $(LIBS)
+
+clean:
+	$(RM) $(DEPENDS) $(TARGETS)
+	$(RM) *.o
+
+
+
+
+
+

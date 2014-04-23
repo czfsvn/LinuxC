@@ -1,0 +1,26 @@
+CC = g++
+RM = /bin/rm -f
+IDIR = ../include
+ODIR = obj
+LDIR = ../lib
+LIBS = -lm
+
+CFLAGS = -I$(IDIR).
+TARGET = hellomake
+
+_DEPS = hellomake.h
+DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
+
+_OBJS = hellomake.o hellofun.o
+OBJS = $(patsubst %, $(ODIR)/%, $(_OBJS))
+
+$(ODIR)/%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+
+clean:
+	$(RM) $(TARGET) *.o

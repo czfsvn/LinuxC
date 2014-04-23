@@ -1,0 +1,10 @@
+RM = /bin/rm -f
+
+all:
+	g++ main.cpp hello.cpp factorial.cpp -o hello
+
+
+clean:
+	$(RM) all hello *o
+
+

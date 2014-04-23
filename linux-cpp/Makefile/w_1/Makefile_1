@@ -1,0 +1,20 @@
+#注释
+
+CC = g++
+RM = /bin/rm -f
+
+Main:	Main.o	Test.o Orgin.o
+	$(CC)	-o	Main Main.o Test.o Orgin.o
+
+Main.o:	Main.cpp Test.h
+	$(CC)	-c	Main.cpp
+
+Test.o:	Test.cpp Orgin.o
+	$(CC)	-c	Test.cpp Orgin.h
+
+Orgin.o:	Orgin.cpp Orgin.h
+	$(CC)	-c	Orgin.cpp
+
+clean:
+	$(RM)	*.o
+

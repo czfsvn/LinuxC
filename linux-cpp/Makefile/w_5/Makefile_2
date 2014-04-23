@@ -1,0 +1,19 @@
+CC = g++
+RM = /bin/rm -f
+CFLAGS = -I.
+DEPS = hellomake.h
+
+TARGET = hellomake
+
+OBJS = hellomake.o \
+	   hellofun.o
+
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(TARGET): $(OBJS)
+		$(CC) -o $(TARGET) $(OBJS) $(CFLAGS)
+
+
+clean:
+	$(RM) $(TARGET) *.o

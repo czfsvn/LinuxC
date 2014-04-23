@@ -1,0 +1,11 @@
+CC = g++
+RM = /bin/rm -f
+CFLAGS = -c -Wall
+
+TARGET= hellomake
+
+$(TARGET): *.c
+	$(CC) -o $(TARGET) *.c -I.
+
+clean:
+	$(RM) $(TARGET) *.o

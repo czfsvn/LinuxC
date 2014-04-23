@@ -1,0 +1,18 @@
+RM = /bin/rm -f
+CC=g++
+CFLAGS=-c -Wall
+LDFLAGS=
+SRCS=main.cpp hello.cpp factorial.cpp
+OBJS=$(SRCS:.cpp=.o)
+EXEC=hello
+
+all: $(SRCS) $(EXEC)
+
+$(EXEC):$(OBJS)
+	$(CC) $(LDFLAGS)	$(OBJS) -o $@
+
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@
+
+clean:
+	$(RM) *.o $(EXEC)

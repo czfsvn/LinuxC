@@ -1,0 +1,21 @@
+RM = /bin/rm -f
+CC = g++
+CFLAGS=-c -Wall
+
+all: hello
+TARGET=hello
+
+$(TARGET): main.o factorial.o hello.o
+	$(CC) main.o hello.o factorial.o -o hello
+
+main.o:	main.cpp
+	$(CC) $(CFLAGS)	main.cpp
+
+factorial.o: factorial.cpp
+	$(CC) $(CFLAGS) factorial.cpp
+
+hello.o: hello.cpp
+	$(CC) $(CFLAGS) hello.cpp
+
+clean:
+	$(RM) all $(TARGET) *o

@@ -1,0 +1,22 @@
+# ×¡ÊÀÐÐ
+#
+
+RM = /bin/rm -f
+CC = g++
+
+#Main:	Main.o Test.o Orgin.o
+#	g++	-o	Main Main.o Test.h Orgin.o
+Main:	Main.o Test.o Orgin.o
+	$(CC)	-o	Main Main.o Test.o Orgin.o
+
+Main.o:	Main.cpp
+	$(CC)	-c	Main.cpp
+
+Test.o:	Test.cpp
+	$(CC)	-c	Test.cpp
+
+Orgin.o:	Orgin.cpp
+	$(CC)	-c	Orgin.cpp
+
+clean:
+	$(RM) *.o
