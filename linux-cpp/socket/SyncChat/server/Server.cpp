@@ -30,9 +30,9 @@
  * * 科技站在巨人的肩膀上进步更快！感谢有开源前辈的贡献！
  * *********************************************************************/
 
-int main()
+int main(int argc, char** argv)
 {
-    unsigned int myport = 3838, lisnum = 2;
+    unsigned int myport = 3838, lisnum = 1;
 
     int sockfd = socket(PF_INET, SOCK_STREAM, 0);
     if (sockfd == -1)
@@ -45,7 +45,8 @@ int main()
     bzero(&my_addr, sizeof(my_addr));
     my_addr.sin_family = PF_INET;
     my_addr.sin_port = htons(myport);
-    my_addr.sin_addr.s_addr = INADDR_ANY;
+    //my_addr.sin_addr.s_addr = INADDR_ANY;
+    my_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     if (bind(sockfd, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == -1)
     {

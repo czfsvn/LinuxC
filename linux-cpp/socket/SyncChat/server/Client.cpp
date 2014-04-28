@@ -38,11 +38,18 @@ int main()
     struct sockaddr_in dest;
     bzero(&dest, sizeof(dest));
     dest.sin_family = AF_INET;
-    dest.sin_port = 3838;
-    dest.sin_addr.s_addr = inet_addr("192.168.122.230");
+    dest.sin_port = htons(3838);
+    dest.sin_addr.s_addr = inet_addr("127.0.0.1");
+    /*
+    if (inet_aton("127.0.0.1", (struct in_addr *)&dest.sin_addr.s_addr) == 0)
+    {
+        perror("127.0.0.1");
+        exit(errno);
+    }
+    */
     std::cout << "address created" << std::endl;
 
-    if (connect(sockfd, (struct sockaddr*)&dest, sizeof(dest)) != 0)
+    if (connect(sockfd, (struct sockaddr*)&dest, sizeof(dest)) < 0)
     {
         perror("connect");
         exit(errno);
