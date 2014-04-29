@@ -2,7 +2,7 @@ CXX = /usr/bin/g++
 CXXFLAGS =
 CXXLFLAGS =
 
-OBJS = Config.o Log.o TypeDef.o
+OBJS = Config.o Log.o TypeDef.o Common.o
 
 LIB_TAR = libhelper.a
 DYN_LIB_TAR = libhelper.so
