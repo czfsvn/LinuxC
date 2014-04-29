@@ -1,51 +1,47 @@
-#ifndef __MYSQLCON_20111101_H__
-#define __MYSQLCON_20111101_H__
+#ifndef __MYSQLRES_20111101_H__
+#define __MYSQLRES_20111101_H__
 
-#include "Mysqlres.h"
-#include <iostream>
+#ifndef linux
+#include <WinSock.h>
+#include "mysql.h"
+#else
+#include <mysql.h>
+#endif
+#include "TypeDef.h"
 
-enum DBErr
+class MysqlRes
 {
-	DB_ERR_CONN						= -2,
-	DB_ERR_UNKNOWN					= -3,
-	DB_SUCCESS						= 0,
-	DB_NO_RECORD					= 1,
-	DB_HAS_RECORD					= 2,
-	CR_CONN_HOST_ERROR				= 2003,
-	CR_SERVER_GONE_ERROR			= 2006,
-	CR_SERVER_LOST					= 2013,
-};
-
-class MysqlCon
-{
+	friend class MysqlCon;
 public:
-	MysqlCon(std::string& ip, std::string& userName, std::string& pwd, std::string& dbName);
-	~MysqlCon();
+	MysqlRes();
+	~MysqlRes();
 
-	bool Connection();
-	void Close();
-	bool ReConnect();
-	bool CheckConnection();
+	uint32 GetRecordCount();
+	uint32 GetFieldCount();
+	uint32 GetFieldLength(uint32 idx);
 
-	uint32 EscapeString(std::string& str);
+	bool GetRecord();
+	const char* GetFieldVal(uint32 idx);
 
-	int32 ExcuteSql(std::string& sql);
-	int32 ExcuteSqlEx(std::string& sql, MysqlRes& res);
+	void Release();
 
-	int32 ExcuteSql(const char* sql);
-	int32 ExcuteSqlEx(const char* sql, MysqlRes& res);
+	uint64 GetUInt64(uint32 idx);
+	uint32 GetUInt(uint32 idx);
+	uint16 GetUInt16(uint32 idx);
+	uint8 GetUInt8(uint32 idx);
+
+	int64 GetInt64(uint32 idx);
+	int32 GetInt(uint32 idx);
+	int16 GetInt16(uint32 idx);
+	int8 GetInt8(uint32 idx);
+
+	float GetFloat(uint32 idx);
+
+	std::string GetStr(uint32 idx);
 protected:
 private:
-	std::string m_host;
-	std::string m_dbName;
-	std::string m_usr;
-	std::string m_pwd;
-	char* m_socket;
-	uint32 m_clientFlag;
-	uint32 m_port;
-    std::string m_CodeQuery;
-
-	bool m_isConnect;
-	MYSQL* m_mysql;
+	MYSQL_RES* m_res;
+	MYSQL_ROW m_row;
+	unsigned long* m_adwlengths;
 };
 #endif
