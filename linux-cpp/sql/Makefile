@@ -32,4 +32,15 @@ debug:
 		done
 
 
+ctags:
+	@ctags -R -h ".c.cpp.h" -o tags
 
+distclean:
+	@find . -iname .\*.d -exec rm \{\} \;
+	@find . -iname .\*.d.* -exec rm \{\} \;
+
+clean:
+	@for dir in $(ALL_SUB_DIRS); \
+	do \
+		$(MAKE) -C $$dir clean; \
+		done

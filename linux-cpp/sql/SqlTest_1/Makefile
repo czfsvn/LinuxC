@@ -10,7 +10,7 @@ LIB_TAR = ../Helper/libhelper.a \
 SRCS = $(OBJS:%.o=%.cpp)
 DEPS = $(OBJS:%.o=.%.d)
 
-TARGET = TmlCompose
+TARGET = Main
 
 all : $(TARGET)
 

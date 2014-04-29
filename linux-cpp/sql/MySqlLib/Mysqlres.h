@@ -1,12 +1,15 @@
 #ifndef __MYSQLRES_20111101_H__
 #define __MYSQLRES_20111101_H__
 
+/*
 #ifndef linux
 #include <WinSock.h>
 #include "mysql.h"
 #else
-#include <mysql.h>
 #endif
+*/
+
+#include <mysql.h>
 #include "TypeDef.h"
 
 class MysqlRes
