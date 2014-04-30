@@ -38,8 +38,6 @@ int main()
     }
     printf("connect socket success !\n");
 
-    int s_len = send(clientfd, REUQEST_MESSAGE, sizeof(REUQEST_MESSAGE), 0);
-
     char buf[BUFFER_SIZE] = {0};
     int length = recv(clientfd, buf, BUFFER_SIZE, 0);
     if (length < 0)
