@@ -15,5 +15,9 @@ int main()
     std::string   PWD="123456";
     std::string   DB="test";
     MysqlCon* conn = new MysqlCon(IP, USER, PWD, DB);
+    if (conn)
+    {
+        std::cout << "succ" << std::endl;
+    }
     return 0;
 }

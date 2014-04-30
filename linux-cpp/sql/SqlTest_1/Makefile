@@ -1,6 +1,6 @@
 CXX = /usr/bin/g++
-CXXFLAGS = -I -Wall -I../MySqlLib -I../Helper  `mysql_config  --cflags`
-CXXLFLAGS = -Wall -lrt  -L../Helper -L../MySqlLib -lhelper -lmysqlczf `mysql_config --libs_r`
+CXXFLAGS = $(COMPILE_OPT)-I -Wall -I../MySqlLib -I../Helper  `mysql_config  --cflags`
+CXXLFLAGS = $(COMPILE_OPT)-Wall -lrt  -L../Helper -L../MySqlLib -lhelper -lmysqlczf `mysql_config --libs_r` -static
 
 OBJS = Main.o
 
