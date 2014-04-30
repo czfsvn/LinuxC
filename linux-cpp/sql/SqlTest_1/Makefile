@@ -1,4 +1,4 @@
-XX = /usr/bin/g++
+CXX = /usr/bin/g++
 CXXFLAGS = -I -Wall -I../MySqlLib -I../Helper  `mysql_config  --cflags`
 CXXLFLAGS = -Wall -lrt  -L../Helper -L../MySqlLib -lhelper -lmysqlczf `mysql_config --libs_r`
 
@@ -9,8 +9,8 @@ LIB_TAR = ../Helper/libhelper.a \
 
 SRCS = $(OBJS:%.o=%.cpp)
 DEPS = $(OBJS:%.o=.%.d)
-
 TARGET = Main
+
 
 all : $(TARGET)
 
@@ -26,10 +26,11 @@ $(OBJS): %.o: %.cpp
 $(TARGET): $(OBJS) $(LIB_TAR)
 	$(CXX) $(OBJS) -o $@ $(CXXLFLAGS)
 
+
 distclean:
 	@find . -iname .\*.d -exec rm \{\} \;
 	@find . -iname .\*.d.* -exec rm \{\} \;
 
+
 clean:
 	@rm -rf $(OBJS) $(LIB_TAR) core *~
-
