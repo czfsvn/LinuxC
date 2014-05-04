@@ -2,7 +2,8 @@ CXX = /usr/bin/g++
 CXXFLAGS = $(COMPILE_OPT)-I -Wall -I../MySqlLib -I../Helper  `mysql_config  --cflags`
 CXXLFLAGS = $(COMPILE_OPT)-Wall -lrt  -L../Helper -L../MySqlLib -lhelper -lmysqlczf `mysql_config --libs_r` -static
 
-OBJS = Main.o
+OBJS = Main.o \
+	   Engine.o
 
 LIB_TAR = ../Helper/libhelper.a \
 		  ../MySqlLib/libmysqlczf.a

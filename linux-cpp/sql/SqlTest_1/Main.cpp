@@ -1,5 +1,5 @@
 #include <iostream>
-#include "MysqlCon.h"
+#include "Engine.h"
 
 
 using namespace std;
@@ -10,14 +10,7 @@ using namespace std;
 
 int main()
 {
-    std::string   IP="127.0.0.1";
-    std::string   USER="czf";
-    std::string   PWD="123456";
-    std::string   DB="test";
-    MysqlCon* conn = new MysqlCon(IP, USER, PWD, DB);
-    if (conn)
-    {
-        std::cout << "succ" << std::endl;
-    }
+    Engine::get_mutable_instance().Run(OP_M_SINGLE);
+    Engine::get_mutable_instance().Run(OP_I_SINGLE);
     return 0;
 }

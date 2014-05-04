@@ -16,5 +16,5 @@ FuncTime::~FuncTime()
     uint64 end = (uint64)end_tv.tv_sec*1000000000L + end_tv.tv_nsec;
     uint64 from = (uint64)m_from.tv_sec*1000000000L + m_from.tv_nsec;
 
-    std::cout << m_func << " cost: " << end-from << " 毫秒" << std::endl;
+    std::cout << m_func << " cost: " << end-from << " msec" << std::endl;
 }
