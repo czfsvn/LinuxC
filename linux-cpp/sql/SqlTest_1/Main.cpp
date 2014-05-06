@@ -10,7 +10,11 @@ using namespace std;
 
 int main()
 {
+    /*
     Engine::get_mutable_instance().Run(OP_M_SINGLE);
     Engine::get_mutable_instance().Run(OP_I_SINGLE);
+    */
+    Engine::get_mutable_instance().RunCom(OP_M_COMPLEX);
+    Engine::get_mutable_instance().RunCom(OP_I_COMPLEX);
     return 0;
 }

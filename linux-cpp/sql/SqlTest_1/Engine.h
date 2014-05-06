@@ -31,6 +31,7 @@ class Engine : public  boost::serialization::singleton<Engine>
         ~Engine();
 
         void Run(uint32 type);
+        void RunCom(uint32 type);
 
     protected:
     private:
@@ -40,8 +41,7 @@ class Engine : public  boost::serialization::singleton<Engine>
         void _SingleInsert(uint32 type);
         void _SingleUpdate(uint32 type);
 
-        void _ComInsert(uint32 type, uint32 maxlen);
-        void _ComUpdate(uint32 type, uint32 maxlen);
+        void _ComInsert(uint32 type);
 
     private:
         //boost::shared_ptr<MysqlCon>     m_conn;

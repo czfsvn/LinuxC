@@ -16,6 +16,7 @@ struct FuncTime
     private:
         struct timespec  m_from;
         uint64 m_logGap;
+        uint64 m_fromSec;
         std::string m_func;
 };
 

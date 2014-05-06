@@ -1,8 +1,9 @@
 #include "Engine.h"
 #include "Common.h"
 
+#define     MAX_INSERT_CNT      2
 #define     MAX_STR_SIZE        1000
-#define     MAX_IDX             1000000
+#define     MAX_IDX             10
 /*
 #define     IP                  "127.0.0.1"
 #define     USER                "czf"
@@ -34,6 +35,12 @@ void Engine::Run(uint32 type)
     _CreateTables(type);
     _SingleInsert(type);
     _SingleUpdate(type);
+}
+
+void Engine::RunCom(uint32 type)
+{
+    _CreateTables(type);
+    _ComInsert(type);
 }
 
 void Engine::_Init(uint32 type)
@@ -111,13 +118,89 @@ void Engine::_SingleUpdate(uint32 type)
         m_conn->ExcuteSql(sql);
     }
 }
-
-void Engine::_ComInsert(uint32 type, uint32 maxlen)
+/*
+void Engine::_ComInsert(uint32 type)
 {
+    std::cout<< "\nEngine::_SingleInsert\ttype = "<<type<<std::endl;
 
+    std::string funcStr = IntBStr(__LINE__) + "_"+ IntBStr(type);
+    FTime(funcStr);
+
+    std::string table = "TEST_TABLE_" + IntBStr(type);
+    std::string sql = "INSERT INTO ";
+    sql += table;
+    sql += " VALUES";
+
+    uint32 cnt = 0;
+    for (uint32 idx = 1; idx <= MAX_IDX; ++idx)
+    {
+        if (cnt >= MAX_INSERT_CNT)
+        {
+            sql += ";";
+            m_conn->ExcuteSql(sql);
+            sql = "INSERT INTO ";
+            sql += table;
+            sql += " VALUES";
+            cnt = 0;
+        }
+
+        if (cnt)
+            sql += ",";
+
+        std::string str = IntBStr(idx);
+        sql += "(" + str + ", 'Test_" + str + "',";
+        sql += str + ", " + str + ",";
+        sql += str + ", " + str + ",";
+        sql += str + ")";
+
+        cnt ++;
+    }
+
+    if (!cnt)
+    {
+        sql += ";";
+        m_conn->ExcuteSql(sql);
+    }
 }
-void Engine::_ComUpdate(uint32 type, uint32 maxlen)
+*/
+
+void Engine::_ComInsert(uint32 type)
 {
+    std::cout<< "\nEngine::_SingleInsert\ttype = "<<type<<std::endl;
 
+    std::string funcStr = IntBStr(__LINE__) + "_"+ IntBStr(type);
+    FTime(funcStr);
+
+    std::string insSql;
+    uint32 cnt = 0;
+    std::string table = "TEST_TABLE_" + IntBStr(type);
+    for (uint32 idx = 1; idx <= MAX_IDX; ++idx)
+    {
+        char sql[MAX_STR_SIZE] = {0};
+        snprintf(sql, MAX_STR_SIZE,
+                "INSERT INTO %s VALUES(%u, 'Test_%u', %u, %u, %u, %u, %u)",
+                table.c_str(),
+                idx, idx, idx, idx, idx, idx, idx);
+
+        insSql += sql;
+        cnt ++;
+
+        if (cnt >= MAX_INSERT_CNT)
+        {
+            insSql += ";";
+            m_conn->ExcuteSql(insSql);
+            cnt = 0;
+            insSql = "";
+        }
+        else
+            insSql += ",";
+    }
+
+    if (cnt >= MAX_INSERT_CNT)
+    {
+        insSql += ";";
+        m_conn->ExcuteSql(insSql);
+    }
 }
+
 
