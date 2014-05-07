@@ -1,7 +1,7 @@
 #include "Common.h"
 
 
-FuncTime::FuncTime(std::string& func) : m_logGap(0)
+FuncTime::FuncTime(const std::string& func) : m_logGap(0)
                                         ,m_func(func)
 {
     clock_gettime(CLOCK_REALTIME, &m_from);

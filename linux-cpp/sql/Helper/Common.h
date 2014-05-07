@@ -6,11 +6,13 @@
 
 #include "TypeDef.h"
 
+#define     _S(x)   #x
+
 
 struct FuncTime
 {
     public:
-        FuncTime(std::string& func);
+        FuncTime(const std::string& func);
         ~FuncTime();
 
     private:

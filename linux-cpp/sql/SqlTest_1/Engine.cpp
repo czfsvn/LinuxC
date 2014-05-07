@@ -11,7 +11,6 @@
 #define     DB                  "test"
 */
 
-
 Engine::Engine()
 {
     std::string IP        = "192.168.122.230";
@@ -28,9 +27,7 @@ Engine::~Engine()
 
 void Engine::Run(uint32 type)
 {
-    //FTime(IntBStr(type)(__LINE__));
-    std::string funcStr = IntBStr(__LINE__) + "_"+ IntBStr(type);
-    FTime(funcStr);
+    FTime("Run"_S(__LINE__)_S(type));
 
     _CreateTables(type);
     _SingleInsert(type);
@@ -51,8 +48,7 @@ void Engine::_Init(uint32 type)
 void Engine::_CreateTables(uint32 type)
 {
     std::cout<< "\nEngine::_CreateTables\ttype = "<<type<<std::endl;
-    std::string funcStr = IntBStr(__LINE__) + "_"+ IntBStr(type);
-    FTime(funcStr);
+    FTime("Run"_S(__LINE__)_S(type));
 
     std::string engine = "MyISAM";
     std::string table = "TEST_TABLE_" + IntBStr(type);
@@ -85,8 +81,7 @@ void Engine::_SingleInsert(uint32 type)
 {
     std::cout<< "\nEngine::_SingleInsert\ttype = "<<type<<std::endl;
 
-    std::string funcStr = IntBStr(__LINE__) + "_"+ IntBStr(type);
-    FTime(funcStr);
+    FTime("Run"_S(__LINE__)_S(type));
 
     std::string table = "TEST_TABLE_" + IntBStr(type);
     for (uint32 idx = 1; idx <= MAX_IDX; ++idx)
@@ -104,9 +99,7 @@ void Engine::_SingleInsert(uint32 type)
 void Engine::_SingleUpdate(uint32 type)
 {
     std::cout<< "\nEngine::_SingleUpdate\ttype = "<<type<<std::endl;
-
-    std::string funcStr = IntBStr(__LINE__) + "_"+ IntBStr(type);
-    FTime(funcStr);
+    FTime("Run"_S(__LINE__)_S(type));
 
     std::string table = "TEST_TABLE_" + IntBStr(type);
     for (uint32 idx = 1; idx <= MAX_IDX; ++idx)
@@ -123,8 +116,7 @@ void Engine::_ComInsert(uint32 type)
 {
     std::cout<< "\nEngine::_SingleInsert\ttype = "<<type<<std::endl;
 
-    std::string funcStr = IntBStr(__LINE__) + "_"+ IntBStr(type);
-    FTime(funcStr);
+    FTime("Run"_S(__LINE__)_S(type));
 
     std::string table = "TEST_TABLE_" + IntBStr(type);
     std::string sql = "INSERT INTO ";
@@ -168,8 +160,7 @@ void Engine::_ComInsert(uint32 type)
 {
     std::cout<< "\nEngine::_SingleInsert\ttype = "<<type<<std::endl;
 
-    std::string funcStr = IntBStr(__LINE__) + "_"+ IntBStr(type);
-    FTime(funcStr);
+    FTime("Run"_S(__LINE__)_S(type));
 
     std::string insSql;
     uint32 cnt = 0;
