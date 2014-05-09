@@ -1,9 +1,9 @@
 #include "Engine.h"
 #include "Common.h"
 
-#define     MAX_INSERT_CNT      2
+#define     MAX_INSERT_CNT      100
 #define     MAX_STR_SIZE        1000
-#define     MAX_IDX             10
+#define     MAX_IDX             10000000
 /*
 #define     IP                  "127.0.0.1"
 #define     USER                "czf"
@@ -111,7 +111,6 @@ void Engine::_SingleUpdate(uint32 type)
         m_conn->ExcuteSql(sql);
     }
 }
-/*
 void Engine::_ComInsert(uint32 type)
 {
     std::cout<< "\nEngine::_SingleInsert\ttype = "<<type<<std::endl;
@@ -154,8 +153,8 @@ void Engine::_ComInsert(uint32 type)
         m_conn->ExcuteSql(sql);
     }
 }
-*/
 
+/*
 void Engine::_ComInsert(uint32 type)
 {
     std::cout<< "\nEngine::_SingleInsert\ttype = "<<type<<std::endl;
@@ -193,5 +192,6 @@ void Engine::_ComInsert(uint32 type)
         m_conn->ExcuteSql(insSql);
     }
 }
+*/
 
 
