@@ -75,6 +75,7 @@ int main()
     {
         socklen_t sin_size = sizeof(struct sockaddr_in);
         struct sockaddr_in cli_addr;
+        printf("wait for accept a new ....\n");
         int clifd = accept(sockfd, (struct sockaddr*)&cli_addr, &sin_size);
         if (clifd == -1)
         {
@@ -82,6 +83,7 @@ int main()
             exit(1);
         }
 
+        printf("wait for recv a new ....\n");
         char buf[MAX_DATA_SIZE] = {0};
         int rcv_size = recv(clifd, buf, MAX_DATA_SIZE, 0);
         if (rcv_size == -1)
@@ -89,7 +91,9 @@ int main()
             perror("recv");
             exit(1);
         }
+        printf("rcvMsg: %s", buf);
 
+        printf("wait for read a new ....\n");
         if (read(clifd, buf, MAX_DATA_SIZE) < 0)
         {
             perror("read");
