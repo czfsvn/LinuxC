@@ -2,7 +2,7 @@ LD_DIR_ROOT = $(PWD)
 
 BUILD_STRING = `date +%Y%m%d`" build"`cat $(BUILD_DIR_ROOT)/.build`
 VERSIONSTRING = `if [ $(VERION_STRING) ]; then echo $(VERION_STRING); else echo "0.0.0"; fi`
-DEBUG_OPT = -g -Werror -rdynamic
+DEBUG_OPT = -g -Werror -rdynamic $(DEB_OPT)
 ZEBRA_DIST_OPT = -g -O2 -Wno-deprecated -fno-strict-aliasing -Werror -rdynamic
 
 
