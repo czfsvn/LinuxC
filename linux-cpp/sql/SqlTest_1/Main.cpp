@@ -10,6 +10,13 @@ using namespace std;
 
 int main()
 {
+#ifdef D_CZF
+    std::cout<<"D_CZF" << std::endl;
+#else
+    std::cout<<"D_CZF NOT" << std::endl;
+#endif
+
+    sleep(5);
     /*
     Engine::get_mutable_instance().Run(OP_M_SINGLE);
     Engine::get_mutable_instance().Run(OP_I_SINGLE);
