@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
-include_directories(/usr/local/Cellar/protobuf/3.5.0.1/include)
-link_directories(/usr/local/Cellar/protobuf/3.5.0.1/lib)
+include_directories($ENV{PROTOBUF_HOME}/include)
+link_directories($ENV{PROTOBUF_HOME}/lib)
 
 project(MAIN_PRO)
 
