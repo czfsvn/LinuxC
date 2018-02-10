@@ -31,8 +31,7 @@ void Test_2()
 
 	// google::protobuf::Message *
 	// 利用Descriptor拿到类型注册的instance. 这个是不可修改的.
-	auto prototype =
-	google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
+	auto prototype = google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
 	if (nullptr == prototype)
 		return;
 
