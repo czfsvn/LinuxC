@@ -1,0 +1,76 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+template <class T>
+void PRINT_ELEMENT(const T& cont, const char* optstr = "")
+{
+    typename T::const_iterator pos;
+    std::cout << optstr << ": ";
+    for (pos = cont.begin(); pos != cont.end(); pos ++)
+        std::cout << *pos << ",";
+
+    std::cout << std::endl;
+}
+
+struct ToInt
+{
+    int operator()(std::string& str)
+    {
+        return std::atoi(str.c_str());
+    }
+};
+
+void Test_transform()
+{
+    std::vector<std::string> str_vec  = {"1", "2", "3"};
+    PRINT_ELEMENT(str_vec, "str_vec");
+
+    std::vector<int> int_vec;
+    std::transform(str_vec.begin(), str_vec.end(),
+            std::inserter(int_vec, int_vec.end()), ToInt());
+    PRINT_ELEMENT(int_vec, "int_vec");
+
+    int_vec.clear();
+    std::transform(str_vec.begin(), str_vec.end(),
+            std::back_inserter(int_vec), ToInt());
+    PRINT_ELEMENT(int_vec, "int_vec");
+
+}
+
+/// string tok
+template<typename Container>
+size_t strtok(const std::string& str, Container& cont, const std::string& deli)
+{
+    cont.clear();
+    const std::string::size_type len = str.length();
+    std::string::size_type i = 0;
+    int count = 0;
+    
+    while (i < len)
+    {
+        i = str.find_first_not_of(deli, i);
+        if (i == std::string::npos)
+            return;
+
+        std::string::size_type j = str.find_first_of(deli, i);
+        count ++;
+
+        if (j == std::string::npos)
+        {
+            cont.push_back(str.substr(i));
+            return;
+        }
+        cont.push_back(str.substr(i));
+        i = j + 1;
+    }
+
+}
+
+int main()
+{
+    Test_transform();
+    return 0;
+}
