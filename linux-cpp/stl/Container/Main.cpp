@@ -3,6 +3,7 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <unistd.h>
 
 using namespace std;
 
@@ -83,10 +84,21 @@ void TestSafeDeleteVec()
     std::for_each(vList.begin(), vList.end(), Del);
 }
 
+void TestWhile()
+{
+    unsigned long idx = 0;
+    while(1)
+    {
+        std::cout << idx ++ << std::endl;
+        usleep(1);
+    }
+}
+
 int main()
 {
     //TestSet();
-    TestSafeDeleteVec();
+    //TestSafeDeleteVec();
+    TestWhile();
 
     return 0;
 }
