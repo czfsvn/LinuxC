@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
-message(STATUS "dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+#message(STATUS "dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+#message(STATUS "LIBS: ${LIBS}")
 
 file(GLOB SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/behaviac_generated/types/internal/*.cpp")
 file(GLOB SRC *.cpp)

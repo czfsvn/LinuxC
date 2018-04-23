@@ -32,6 +32,12 @@ void print_(int x, const char* str)
     std::cout << str << ":" << x << std::endl;
 }
 
+template <typename T, char str>
+void play(T ele)
+{
+    std::cout << str << ele << std::endl;
+}
+
 namespace ns_test1
 {
     struct Play1
@@ -51,6 +57,29 @@ namespace ns_test1
         }
         std::string str;
     };
+
+    template<typename T>
+        class Play3
+        {
+            public:
+                void operator()(T ele)
+                {
+                    std::cout << ele << std::endl;
+                }
+        };
+
+    template<typename T, typename V>
+        class Play4
+        {
+            public:
+                Play4(V s) : str_(s)    {}
+                void operator()(T ele)
+                {
+                    std::cout << str_ << ": "<< ele << std::endl;
+                }
+            private:
+                V str_;
+        };
 
     void Test_1()
     {
@@ -72,11 +101,154 @@ namespace ns_test1
         // use function object
         std::for_each(v.begin(), v.end(), Play1());
         std::for_each(v.begin(), v.end(), Play2("play2"));
+
+        Play2 p2("p2");
+        std::for_each(v.begin(), v.end(), p2);
+
+        std::for_each(v.begin(), v.end(), play<int, 'a'>);
+
+        std::for_each(v.begin(), v.end(), Play3<int>());
+
+        std::for_each(v.begin(), v.end(), Play4<int, std::string>("Play4 "));
     }
 };
 
+namespace ns_test2
+{
+    class Door
+    {
+        public:
+            void open() const
+            {
+                std::cout << "open door horizontally" << std::endl;
+            }
+    };
+
+    class DoorController
+    {
+        protected:
+            std::vector<Door> doorVec_;
+
+        public:
+            void addDoor(Door door)
+            {
+                doorVec_.push_back(door);
+            }
+            void openDoor() const
+            {
+                std::for_each(doorVec_.begin(), doorVec_.end(), mem_fun_ref(&Door::open));
+            }
+    };
+
+    void Test_1()
+    {
+        DoorController dc;
+        dc.addDoor(Door());
+        dc.addDoor(Door());
+        dc.addDoor(Door());
+        dc.openDoor();
+    }
+}
+
+namespace ns_test3
+{
+    class AbstractDoor
+    {
+        public:
+            virtual void open(const char* str) const = 0;
+            virtual ~AbstractDoor() {}
+    };
+
+    class HorizontalDoor : public AbstractDoor
+    {
+        public:
+            void open(const char* str) const
+            {
+                std::cout << str << "open door horiaontally\n";
+            }
+    };
+    class VerticalDoor : public AbstractDoor
+    {
+        public:
+            void open(const char* str) const
+            {
+                std::cout << str << "open door vertically\n";
+            }
+    };
+    class DoorController
+    {
+        protected:
+            std::vector<AbstractDoor*> doorVec_;
+        public:
+            void addDoor(AbstractDoor* door)
+            {
+                doorVec_.push_back(door);
+            }
+            void openDoor()
+            {
+                std::for_each(doorVec_.begin(), doorVec_.end(),
+                        std::bind2nd(mem_fun(&AbstractDoor::open), "John "));
+            }
+            ~DoorController()
+            {
+                std::for_each(doorVec_.begin(), doorVec_.end(), [](AbstractDoor* p)
+                        {
+                            delete p;
+                            p = nullptr;
+                        });
+            }
+    };
+    void Test_1()
+    {
+        DoorController dc;
+        dc.addDoor(new HorizontalDoor());
+        dc.addDoor(new VerticalDoor());
+        dc.openDoor();
+    }
+}
+
+namespace ns_test4
+{
+    class MeanValue
+    {
+        private:
+            long    num_;
+            long    sum_;
+        public:
+            MeanValue() 
+                : num_(0), sum_(0)
+            {
+            }
+            void operator()(int ele)
+            {
+                ++ num_;
+                sum_ += ele;
+            }
+            double value()
+            {
+                return static_cast<double>(sum_) / static_cast<double>(num_);
+            }
+            operator double()
+            {
+                return static_cast<double>(sum_) / static_cast<double>(num_);
+            }
+    };
+    // with return value
+    void Test_1()
+    {
+        std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8};
+        double sum = std::for_each(v.begin(), v.end(), MeanValue());
+        std::cout << "val : " << sum << std::endl;
+
+        MeanValue mv = std::for_each(v.begin(), v.end(), MeanValue());
+        std::cout << "val : " << mv.value() << std::endl;
+    }
+}
+
 int main()
 {
-    ns_test1::Test_1();
+    //ns_test1::Test_1();
+    //ns_test3::Test_1();
+    ns_test4::Test_1();
     return 1;
 }

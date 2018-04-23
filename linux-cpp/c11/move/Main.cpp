@@ -2,6 +2,11 @@
 #include <vector>
 #include <algorithm>
 
+/*
+ *
+ * compile with option  -fno-elide-constructors
+ */
+
 using namespace std;
 
 #define PRINT_LINE  std::cout << "func:" << __func__ << ":" << __LINE__ << std::endl;
@@ -103,8 +108,178 @@ void Test_2()
     Print_Vec(1);
     PrintSeqCont(v, "vector v ");
 }
+
+namespace ns_test1
+{
+    void Test_1()
+    {
+        int x = 20;
+        int& rx = x;
+
+        const int y = 10;
+        const int& rx2 = y;
+        //int& rx3 = 10;          // error 
+    }
+
+    void Test_2()
+    {
+        int             x   = 10;
+        const int       cx  = 20;
+        const int&      rx1 = x;
+        const int&      rx2 = cx;
+        const int&      rx3 = 9;
+    }
+
+    void Test_3()
+    {
+        int&& ry = 200;
+
+        int     x   = 20;
+        //int&&   rrx1 = x;     // error, x is a left value
+        int&&   rrxx = 20;
+        //const int&& rrx = x;  // error, x is a left value
+    }
+
+    void Test_4()
+    {
+        int     x   = 20;
+        int&&   rx = x * 2;
+        int     y = rx + 2;
+        rx        = 100;
+    }
+}
+
+namespace ns_test2
+{
+    void fun(int& lref)
+    {
+        std::cout << "l-value reference\n";
+    }
+    void fun(int&& lref)
+    {
+        std::cout << "r-value reference\n";
+    }
+
+    void fun(const int& clref)
+    {
+        std::cout << "l-value const reference\n";
+    }
+
+    void Test_1()
+    {
+        int     x = 10;
+        fun(x);
+        fun(20);
+    }
+
+    void Test()
+    {
+        Test_1();
+    }
+}
+
+namespace ns_test3
+{
+    template <typename T>
+        class DynArray
+        {
+            public:
+                explicit DynArray(int size)
+                    : m_size(size), m_array{new T[size]}
+                {
+                    std::cout << "Constructor: dyn array is created\n";
+                }
+
+                virtual ~DynArray()
+                {
+                    delete[] m_array;
+                    std::cout << "Destructor: dyn array is destroyed\n";
+                }
+
+                DynArray(const DynArray& rhs) 
+                    : m_size{rhs.m_size}
+                {
+                    m_array = new T[m_size];
+                    for (int i = 0; i < m_size; i++)
+                        m_array[i] = rhs.m_array[i];
+                    std::cout << "Copy constructor: dyn array is created\n";
+                }
+
+                DynArray& operator = (const DynArray& rhs)
+                {
+                    std::cout << "Copy assignment operator is called\n";
+                    if (this == &rhs)
+                        return *this;
+
+                    delete[] m_array;
+                    m_size = rhs.m_size;
+                    m_array = new T[m_size];
+                    for (int i = 0; i < m_size; i++)
+                        m_array[i] = rhs.m_array[i];
+
+                    return *this;
+                }
+
+                DynArray(DynArray&& rhs)
+                    :m_size(rhs.m_size), m_array{rhs.m_array}
+                {
+                    rhs.m_size = 0;
+                    rhs.m_array = nullptr;
+                    std::cout << "Move constructor: dyn array is moved\n";
+                }
+
+                DynArray& operator = (DynArray&& rhs)
+                {
+                    std::cout << "Move assignment operator is called\n";
+                    if (this == &rhs)
+                        return *this;
+                    delete []m_array;
+                    m_size = rhs.m_size;
+                    m_array = rhs.m_array;
+                    rhs.m_size = 0;
+                    rhs.m_array = nullptr;
+
+                    return *this;
+                }
+
+                T& operator [](int idx)
+                {
+                    return m_array[idx];
+                }
+
+                const T& operator [](int idx) const
+                {
+                    return m_array[idx];
+                }
+
+                int size()  const
+                {
+                    return m_size;
+                }
+
+            private:
+                T* m_array;
+                int m_size;
+        };
+
+    DynArray<int> arrayFactory(int size)
+    {
+        DynArray<int> arr{size};
+        return arr;
+    }
+
+    void Test()
+    {
+        {
+            DynArray<int> arr = arrayFactory(10);
+        }
+        return;
+    }
+}
+
 int main()
 {
+    /*
     std::vector<int> v = {1,2,3,4};
     std::for_each(v.begin(), v.end(), Print_Vec1<int>);
 
@@ -113,5 +288,8 @@ int main()
     Test_move();
     Test_1();
     Test_2();
+    */
+    ns_test2::Test();
+    ns_test3::Test();
     return 0;
 }
