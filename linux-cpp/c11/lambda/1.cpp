@@ -167,9 +167,31 @@ void Test_6()
     std::cout << "factorial(6): " << factorial(6) << std::endl;
 }
 
+auto test_3_lbd = [](int a, int b)->int
+{
+    return a * b;
+};
+
+auto test_2_lbd = [](int a, int b)->int
+{
+    auto test_1_lbd = [](int a, int b)->int
+    {
+        return a + b;
+    };
+
+    int sum = test_1_lbd(a, b);
+    int mul = test_3_lbd(a, b);
+    return test_1_lbd(mul, sum);
+};
+
+void Test_8()
+{
+    std::cout << test_2_lbd(2, 4) << std::endl;
+}
+
 
 int main()
 {
-    Test_3();
+    Test_8();
     return 0;
 }
