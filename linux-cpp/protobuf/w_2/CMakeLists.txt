@@ -4,7 +4,18 @@ link_directories($ENV{PROTOBUF_HOME}/lib)
 
 project(MAIN_PRO)
 
+set(PROTOC "protoc")
+
 add_definitions(-std=c++11)
+
+file(GLOB_RECURSE PROTO_FILE *.proto)
+
+foreach(pb ${PROTO_FILE})
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMAND ${PROTOC} --cpp_out=${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/${pb}
+        )
+endforeach(pb ${PROTO_FILE})
 
 set(SRC Main.cpp person.pb.cc)
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--EXPORTED BY TOOL, DON'T MODIFY IT!-->
+<agents version="1" signature="2519980494">
+  <agent type="cpp_agent" base="behaviac::Agent" signature="2358727647">
+    <properties>
+      <property name="int_val" type="int" member="false" static="false" defaultvalue="0" />
+    </properties>
+  </agent>
+</agents>

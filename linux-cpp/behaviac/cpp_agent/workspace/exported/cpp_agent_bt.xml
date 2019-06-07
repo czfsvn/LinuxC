@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--EXPORTED BY TOOL, DON'T MODIFY IT!-->
+<!--Source File: cpp_agent_bt.xml-->
+<behavior name="cpp_agent_bt" agenttype="cpp_agent" version="5">
+  <node class="Sequence" id="0">
+    <node class="Assignment" id="1">
+      <property CastRight="false" />
+      <property Opl="int Self.cpp_agent::int_val" />
+      <property Opr="const int 2" />
+    </node>
+    <node class="Condition" id="2">
+      <property Operator="Less" />
+      <property Opl="int Self.cpp_agent::int_val" />
+      <property Opr="const int 4" />
+    </node>
+    <node class="Action" id="3">
+      <property Method="Self.cpp_agent::HelloCppAgent()" />
+      <property ResultOption="BT_SUCCESS" />
+    </node>
+  </node>
+</behavior>
