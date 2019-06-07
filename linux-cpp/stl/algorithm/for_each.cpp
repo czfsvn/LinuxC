@@ -34,7 +34,7 @@ void print_1(T& t)
 }
 
 template <typename T>
-void print_2(T& t, const char* str)
+void print_2(T& t, int str)
 {
     std::cout << t << std::endl;
 }
@@ -44,14 +44,11 @@ void print_(int x, const char* str)
     std::cout << str << ":" << x << std::endl;
 }
 
-
-
 namespace ns_test1
 {
     struct Play1
     {
-        void operator () (int i)
-        {
+        void operator () (int i){
             std::cout << i << std::endl;
         }
     };
@@ -59,22 +56,19 @@ namespace ns_test1
     struct Play2
     {
         Play2(std::string s) : str(s)   {}
-        void operator () (int i)
-        {
+        void operator () (int i){
             std::cout << str << ":" << i << std::endl;
         }
         std::string str;
     };
 
     template<typename T, typename V>
-        class Play3
-        {
+        class Play3{
             private:
                 V   _str;
             public:
                 Play3(V str)   :    _str(str)   {}
-                void operator() (T  ele) 
-                {
+                void operator() (T  ele) {
                     std::cout << _str << "-" << ele << std::endl;
                 }
         };
@@ -90,6 +84,7 @@ namespace ns_test1
         // use function template
         std::for_each(v.begin(), v.end(), print<int>);
         std::for_each(v.begin(), v.end(), print_1<int, 22>);
+        //std::for_each(v.begin(), v.end(), bind2nd(ptr_fun(print_2<int>), 222));
 
         // use function , with other params
         std::for_each(v.begin(), v.end(), bind2nd(ptr_fun(print_), "bind2nd"));
