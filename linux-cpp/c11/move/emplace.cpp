@@ -146,13 +146,79 @@ namespace ns_ep_1
     }
 }
 
+namespace ns_string
+{
+    void test1()
+    {
+        std::vector<std::string> v;
+        v.reserve(MAX_LEN);
+        TIME_COST("push_back string:");
+        for (int i = 0; i < MAX_LEN; i++)
+        {
+            std::string tmp("ceshi");
+            v.push_back(tmp);
+        }
+    }
+    void test2()
+    {
+        std::vector<std::string> v;
+        v.reserve(MAX_LEN);
+        TIME_COST("push_back move string:");
+        for (int i = 0; i < MAX_LEN; i++)
+        {
+            std::string tmp("ceshi");
+            v.push_back(std::move(tmp));
+        }
+    }
+    void test3()
+    {
+        std::vector<std::string> v;
+        v.reserve(MAX_LEN);
+        TIME_COST("push_back (string):");
+        for (int i = 0; i < MAX_LEN; i++)
+        {
+            v.push_back(std::string("ceshi"));
+        }
+    }
+    void test4()
+    {
+        std::vector<std::string> v;
+        v.reserve(MAX_LEN);
+        TIME_COST("push_back cstring:");
+        for (int i = 0; i < MAX_LEN; i++)
+        {
+            v.push_back("ceshi");
+        }
+    }
+    void test5()
+    {
+        std::vector<std::string> v;
+        v.reserve(MAX_LEN);
+        TIME_COST("push_back string:");
+        for (int i = 0; i < MAX_LEN; i++)
+        {
+            v.emplace_back("ceshi");
+        }
+    }
+
+    void Main()
+    {
+        test1();
+        test2();
+        test3();
+        test4();
+        test5();
+    }
+}
+
 int main()
 {
     //ns_ep_1::test1();
-    ns_ep_1::test3();
-    ns_ep_1::test4();
-    ns_ep_1::test5();
-    ns_ep_1::test6();
+    //ns_ep_1::test3();
+    //ns_ep_1::test4();
+    //ns_ep_1::test5();
+    //ns_ep_1::test6();
     //ns_ep_1::test2();
+    ns_string::Main();
     return 0;
 }
