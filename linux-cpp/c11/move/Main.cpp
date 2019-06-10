@@ -6,11 +6,13 @@
 /*
  *
  * compile with option  -fno-elide-constructors
+ * g++ Main.cpp -std=gnu++11 -lrt 
  */
 
 using namespace std;
 
 #define PRINT_LINE  std::cout << "func:" << __func__ << ":" << __LINE__ << std::endl;
+#define PRINT_FUNC(x)   std::cout << x << std::endl;
 
 struct FunctTime
 {
@@ -383,6 +385,149 @@ namespace ns_test4
     }
 }
 
+namespace ns_stringstream
+{
+    struct ATest
+    {
+        int i = 100;
+    };
+    
+    ostream& operator << (ostream& s, const ATest& a)
+    {
+        s << a.i;
+        return s;
+    }
+
+    struct BTest
+    {
+        int i = 1000;
+        friend ostream& operator << (ostream& s, const BTest& a)
+        {
+            s << a.i;
+            return s;
+        }
+    };
+
+    void test_1()
+    {
+        ATest a;
+        std::cout << a << std::endl;
+
+        BTest s;
+        std::cout << s << std::endl;
+    }
+
+}
+
+namespace ns_test_emplace
+{
+    // 1、一个容器从另外一个容器 emplace 数据， 另外一个容器中的内容是否为空 ? 
+    // 2、使用-fno-elide-constructors前后区别
+    // 3、是否使用move construction的区别
+    // 4、容器中元素序列化成字符串输出
+    //
+
+    class Pointer
+    {
+        public:
+            Pointer(int a) : poi(a) {}
+            int poi = 100;
+    };
+
+    class A
+    {
+        public:
+            A(int i, Pointer* ap) : a(i), point(ap) {   PRINT_LINE; };
+            ~A()    {   PRINT_LINE;}
+
+            friend ostream& operator << (ostream& s, const A& a)
+            {
+                s << a.a << " - "<< (a.point != nullptr ? a.point->poi : 200000);
+                return s;
+            }
+
+        private:
+            int a = 100;
+            Pointer* point = nullptr;
+    };
+
+    void test_1()
+    {
+        std::vector<A> aVec, bVec;
+        for (int i = 10; i < 12; i++)
+            aVec.emplace_back(A(i, new Pointer(i)));
+
+        std::cout << "bef move to bVec -----------------------------------------\n";
+        PrintSeqCont(aVec, "12");
+
+        std::cout << "-----------------------------------------\n";
+        for (int i = 0; i < aVec.size(); i++)
+            bVec.emplace_back(aVec[i]);
+        
+        std::cout << "after move to bVec -----------------------------------------\n";
+        PrintSeqCont(aVec, "12");
+
+        std::cout << "bVec -----------------------------------------\n";
+        PrintSeqCont(aVec, "12");
+    }
+
+    class B
+    {
+        public:
+            B(int i, Pointer* ap) : a(i), point(ap) { PRINT_FUNC("B construction ")  };
+            ~B()    {   PRINT_FUNC("B destruction");   }
+            B(const B& b) : a(b.a), point(b.point)  {   PRINT_FUNC("copy construction ");   }
+            B& operator=(const B& b)    
+            {
+                a = b.a;
+                point = b.point;
+                PRINT_FUNC("assign construction");
+            }
+
+            B(B&& b) : a(b.a), point(b.point)
+            {
+                b.point = nullptr;
+                PRINT_FUNC("move construction");
+            }
+            B&& operator = (B&& b)
+            {
+                a = b.a;
+                point = b.point;
+                b.point = nullptr;
+                PRINT_FUNC("assgin move construction");
+            }
+
+            friend ostream& operator << (ostream& s, const B& a)
+            {
+                s << a.a << " - "<< (a.point != nullptr ? a.point->poi : 200000);
+                return s;
+            }
+        private:
+            int a = 100;
+            Pointer* point = nullptr;
+    };
+
+    void test_2()
+    {
+        std::vector<B> srcVec, destVec;
+        for (int i = 10; i < 12; i++)
+            srcVec.emplace_back(B(i, new Pointer(i)));
+
+        std::cout << "bef move to srcVec -----------------------------------------\n";
+        PrintSeqCont(srcVec, "12");
+
+        std::cout << "-----------------------------------------\n";
+        for (int i = 0; i < srcVec.size(); i++)
+            destVec.emplace_back(srcVec[i]);
+        
+        std::cout << "after move to destVec -----------------------------------------\n";
+        PrintSeqCont(srcVec, "12");
+
+        std::cout << "destVec -----------------------------------------\n";
+        PrintSeqCont(destVec, "12");
+    }
+}
+
 int main()
 {
     /*
@@ -398,7 +543,9 @@ int main()
     ns_test3::Test();
     */
     //ns_test4::Test_1();
-    ns_test4::Test_2();
+    //ns_test4::Test_2();
+    //ns_stringstream::test_1();
+    ns_test_emplace::test_2();
 
     return 0;
 }

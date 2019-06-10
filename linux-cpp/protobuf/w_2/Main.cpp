@@ -2,6 +2,7 @@
 #include "person.pb.h"
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/message.h>
+#include <time.h>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ auto book_lbd = [](AddressBook& book)->void
 	person->set_name("test1");
 	person->set_id(1);
 	person->set_email("test1@.mail");
-	std::cout<<book.Utf8DebugString()<<std::endl;
+	//std::cout<<book.Utf8DebugString()<<std::endl;
 };
 
 void Test_1()
@@ -102,12 +103,185 @@ void Test_4()
 	std::cout << reflector->GetUInt32(person, field) << std::endl;
 }
 
-int main()
+namespace test_timeuse
 {
+    class FunctionTime 
+    {
+        public:
+            FunctionTime(const char* name, int time) : func_name_(name), times(time)  
+            {
+                clock_gettime(CLOCK_REALTIME, &enter_);
+            }
+
+            ~FunctionTime() 
+            {
+                struct timespec leave;
+                clock_gettime(CLOCK_REALTIME, &leave);
+
+                unsigned long long from = (unsigned long long)(enter_.tv_sec * 1000000000L) + enter_.tv_nsec;
+                unsigned long long end = (unsigned long long)(leave.tv_sec * 1000000000L) + leave.tv_nsec;
+                unsigned long long intval = end -  from;
+                unsigned long long each = intval/times; 
+                std::cout <<  func_name_ << " cost " << intval << "ns, each cost: " << each <<"ns\n";
+            }
+        private:
+            std::string func_name_;
+            struct timespec enter_;
+            int     times = 0;
+    };
+
+
+
+#define FuncTime(a, b) FunctionTime func(a, b)
+
+    void deserialize_1(std::string& bin_data, int times)
+    {
+        FuncTime(__FUNCTION__, times);
+        for (int idx = 0; idx < times; idx++)
+        {
+            AddressBook book;
+            if (book.ParseFromString(bin_data) == false)
+            {
+                std::cout << "deserialize 1 parse failed: " << idx << std::endl;
+            }
+        }
+    }
+    void deserialize_2(std::string& bin_data, int times, AddressBook* book)
+    {
+        FuncTime(__FUNCTION__,times);
+        for (int idx = 0; idx < times; idx++)
+        {
+            if (book->ParseFromString(bin_data) == false)
+            {
+                std::cout << "deserialize 2 parse failed: " << idx << std::endl;
+            }
+        }
+    }
+
+    void deserialize_3(std::string& bin_data, int times, const char* msgname)
+    {
+        FuncTime(__FUNCTION__, times);
+        const google::protobuf::Descriptor* descriptor = 
+            google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(msgname); 
+        if (!descriptor)
+        {
+            std::cout << "deserialize 3 descriptor failed: " << times << std::endl;
+            return;
+        }
+        const google::protobuf::Message* prototype = 
+            google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
+        if (!prototype)
+        {
+            std::cout << "deserialize 3 prototype failed: " << times << std::endl;
+            return;
+        }
+        google::protobuf::Message* msg = prototype->New();
+        for (int idx = 0; idx < times; idx++)
+        {
+            if (msg->ParseFromString(bin_data) == false)
+            {
+                std::cout << "deserialize 3  parse failed: " << idx << std::endl;
+            }
+        }
+    }
+
+    void deserialize_3_1(std::string& bin_data, int times, const char* msgname)
+    {
+        FuncTime(__FUNCTION__, times);
+        const google::protobuf::Descriptor* descriptor = 
+            google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(msgname); 
+        if (!descriptor)
+        {
+            std::cout << "deserialize 3_1 descriptor failed: " << times << std::endl;
+            return;
+        }
+        const google::protobuf::Message* prototype = 
+            google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
+        if (!prototype)
+        {
+            std::cout << "deserialize 3_1 prototype failed: " << times << std::endl;
+            return;
+        }
+        for (int idx = 0; idx < times; idx++)
+        {
+            google::protobuf::Message* msg = prototype->New();
+            if (msg->ParseFromString(bin_data) == false)
+            {
+                std::cout << "deserialize 3_1  parse failed: " << idx << std::endl;
+            }
+            delete msg;
+        }
+    }
+    void deserialize_4(std::string& bin_data, int times, const char* msgname)
+    {
+        FuncTime(__FUNCTION__, times);
+        for (int idx = 0; idx < times; idx++)
+        {
+            const google::protobuf::Descriptor* descriptor = 
+                google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(msgname); 
+            if (!descriptor)
+            {
+                std::cout << "deserialize 4 descriptor failed: " << times << std::endl;
+                return;
+            }
+            const google::protobuf::Message* prototype = 
+                google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
+            if (!prototype)
+            {
+                std::cout << "deserialize 4 prototype failed: " << times << std::endl;
+                return;
+            }
+            google::protobuf::Message* msg = prototype->New();
+            if (msg->ParseFromString(bin_data) == false)
+            {
+                std::cout << "deserialize 4  parse failed: " << idx << std::endl;
+            }
+            delete msg;
+        }
+    }
+    
+    void test(int times)
+    {
+        AddressBook book;
+        book_lbd(book);
+
+        std::string bin_data;
+        book.SerializeToString(&bin_data);
+
+        std::cout << "test times: " << times << std::endl;
+        deserialize_1(bin_data, times);
+
+        AddressBook* other = new AddressBook;
+        deserialize_2(bin_data, times, other);
+        delete other;
+
+        deserialize_3(bin_data, times, book.GetTypeName().c_str());
+        deserialize_3_1(bin_data, times, book.GetTypeName().c_str());
+        deserialize_4(bin_data, times, book.GetTypeName().c_str());
+    }
+}
+
+int main(int argc, char** argv)
+{
+    if (argc < 2)
+    {
+        std::cout << "please input times \n";
+        //return 0;
+    }
+    for (int idx = 0; idx < argc; idx++)
+        std::cout << idx << " : " << argv[idx] << std::endl; 
+
+    //int times = (int)(argv[1]);
+    int times = 10000000;
+    /*
 		Test_1();
 		Test_2();
 		Test_3();
 		Test_4();
+        */
+        test_timeuse::test(times);        
 		std::cout<<"Hello, World!"<<std::endl;
 		return 0;
 }
+
+// ./main 1000
