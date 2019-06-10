@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--EXPORTED BY TOOL, DON'T MODIFY IT!-->
+<!--Source File: PlayerAction.xml-->
+<behavior name="PlayerAction" agenttype="PlayerAgent" version="5">
+  <node class="SelectorStochastic" id="0">
+    <node class="Sequence" id="1">
+      <node class="Condition" id="2">
+        <property Operator="Equal" />
+        <property Opl="Self.PlayerAgent::canMove()" />
+        <property Opr="const bool true" />
+      </node>
+      <node class="Action" id="3">
+        <property Method="Self.PlayerAgent::autoMove()" />
+        <property ResultOption="BT_SUCCESS" />
+      </node>
+    </node>
+    <node class="Sequence" id="4">
+      <node class="Condition" id="5">
+        <property Operator="Equal" />
+        <property Opl="Self.PlayerAgent::canFight()" />
+        <property Opr="const bool true" />
+      </node>
+      <node class="Action" id="6">
+        <property Method="Self.PlayerAgent::autoFight()" />
+        <property ResultOption="BT_SUCCESS" />
+      </node>
+    </node>
+  </node>
+</behavior>
