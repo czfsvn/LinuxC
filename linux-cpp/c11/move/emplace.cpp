@@ -6,9 +6,28 @@
 
 using namespace std;
 
-#define FUNC(x)    //std::cout << __FUNCTION__ << "---" << (x) << std::endl;
+#define FUNC(x)    std::cout << __FUNCTION__ << "---" << (x) << std::endl;
 
 #define MAX_LEN     100000000
+
+class FuncTime
+{
+    public:
+        FuncTime(const std::string& line)  
+        {
+            tag = std::move(line);
+            start = clock();
+        }
+        ~FuncTime()
+        {
+            int64_t end = clock();
+            std::cout << tag << " cost " << (end - start) / 1000 << " msec\n";
+        }
+
+    private:
+        int64_t   start;
+        std::string tag;
+};
 
 class Base
 {
@@ -33,25 +52,6 @@ class Joker
         }
 
         Base* pBase = nullptr;
-};
-
-class FuncTime
-{
-    public:
-        FuncTime(const std::string& line)  
-        {
-            tag = std::move(line);
-            start = clock();
-        }
-        ~FuncTime()
-        {
-            int64_t end = clock();
-            std::cout << tag << " cost " << (end - start) / 1000 << " msec\n";
-        }
-
-    private:
-        int64_t   start;
-        std::string tag;
 };
 
 #define TIME_COST(str)  std::shared_ptr<FuncTime> __time_cost = std::make_shared<FuncTime>(str);
@@ -211,14 +211,56 @@ namespace ns_string
     }
 }
 
+namespace ns_ep_2
+{
+    class Base
+    {
+        public:
+            Base()      { std::cout << "default constrction\n";     }
+            ~Base()     {   std::cout << "descontruction\n";        }
+            Base(const Base&)   {   std::cout << "copy constrction\n";  }
+    };
+    class Base2
+    {
+        public:
+            Base2()      { std::cout << "default constrction\n";     }
+            ~Base2()     {   std::cout << "descontruction\n";        }
+            Base2(const Base2&)   {   std::cout << "copy constrction\n";  }
+            Base2(Base2&&)   {   std::cout << "move constrction\n";  }
+    };
+
+    void Main()
+    {
+        {
+            // no move construction
+            std::cout << "no move constrctions \n";
+            std::vector<Base> bVec;
+            bVec.reserve(10);
+            Base tmp;
+            bVec.emplace_back(std::move(tmp));
+        }
+        std::cout << "======================\n";
+        {
+            // has move construction
+            std::cout << "has move constrctions \n";
+            std::vector<Base2> bVec;
+            bVec.reserve(10);
+            Base2 tmp;
+            bVec.emplace_back(std::move(tmp));
+        }
+
+    }
+}
+
 int main()
 {
-    //ns_ep_1::test1();
+    ns_ep_1::test1();
     //ns_ep_1::test3();
     //ns_ep_1::test4();
     //ns_ep_1::test5();
     //ns_ep_1::test6();
     //ns_ep_1::test2();
-    ns_string::Main();
+    //ns_string::Main();
+    //ns_ep_2::Main();
     return 0;
 }
