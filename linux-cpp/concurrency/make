@@ -1,0 +1,1 @@
+g++ -g -fno-elide-constructors thread_create.cpp -lpthread
