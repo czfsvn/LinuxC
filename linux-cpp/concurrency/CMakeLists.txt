@@ -20,6 +20,8 @@ add_executable(atomic atomic.cpp)
 add_executable(ThreadPool ThreadPool.cpp)
 
 add_executable(chapter8 chapter8.cpp)
-add_executable(chapter9 Chapter9.cpp)
+#add_executable(chapter9 Chapter9.cpp)
+
+add_executable(behavior BeheviorLog.cpp)
 
 target_link_libraries(mutex ${LIBS}) 

@@ -11,31 +11,30 @@
 
 using namespace std;
 
-#define PRINT_LINE  std::cout << "func:" << __func__ << ":" << __LINE__ << std::endl;
-#define PRINT_FUNC(x)   std::cout << x << std::endl;
+#define PRINT_LINE std::cout << "func:" << __func__ << ":" << __LINE__ << std::endl;
+#define PRINT_FUNC(x) std::cout << x << std::endl;
 
 struct FunctTime
 {
     struct timespec tv1;
     struct timespec tv2;
-    const char* func_name;
-    const char* desc;
+    const char *func_name;
+    const char *desc;
 
-    FunctTime(const char* func=NULL, const char* des=NULL) :
-        func_name(func), desc(des)
+    FunctTime(const char *func = NULL, const char *des = NULL) : func_name(func), desc(des)
     {
         clock_gettime(CLOCK_REALTIME, &tv1);
     }
     ~FunctTime()
     {
         clock_gettime(CLOCK_REALTIME, &tv2);
-        unsigned long end = tv2.tv_sec * 1000000L + tv2.tv_nsec/1000L;
-        unsigned long begin = tv1.tv_sec * 1000000L + tv1.tv_nsec/1000L;
+        unsigned long end = tv2.tv_sec * 1000000L + tv2.tv_nsec / 1000L;
+        unsigned long begin = tv1.tv_sec * 1000000L + tv1.tv_nsec / 1000L;
         std::cout << func_name << "execute time:" << end - begin << "ms\n";
     }
 };
 
-#define FUNCTIME    FunctTime ftime(__PRETTY_FUNCTION__); 
+#define FUNCTIME FunctTime ftime(__PRETTY_FUNCTION__);
 
 template <typename T>
 void Print_Vec(T x)
@@ -67,7 +66,7 @@ void Print_Vec(const char* x)
 */
 
 template <typename T>
-void PrintSeqCont(T& t, std::string str)
+void PrintSeqCont(T &t, std::string str)
 {
     std::cout << "elements: ";
     typename T::const_iterator it = t.begin();
@@ -113,13 +112,13 @@ void Test_move()
 
 void Test_1()
 {
-    std::vector<int> v = {1,2,3,4};
-    for (auto && i : v)
+    std::vector<int> v = {1, 2, 3, 4};
+    for (auto &&i : v)
     {
         std::cout << "i : " << i << std::endl;
     }
     std::cout << "\nprint again: \n";
-    for (auto && i : v)
+    for (auto &&i : v)
     {
         std::cout << "i : " << i << std::endl;
     }
@@ -128,7 +127,7 @@ void Test_1()
 
 void Test_2()
 {
-    std::vector<int> v = {1,2,3,4};
+    std::vector<int> v = {1, 2, 3, 4};
     std::for_each(v.begin(), v.end(), Print_Vec<int>);
     Print_Vec("Hello");
     Print_Vec(1);
@@ -140,60 +139,60 @@ namespace ns_test1
     void Test_1()
     {
         int x = 20;
-        int& rx = x;
+        int &rx = x;
 
         const int y = 10;
-        const int& rx2 = y;
-        //int& rx3 = 10;          // error 
+        const int &rx2 = y;
+        //int& rx3 = 10;          // error
     }
 
     void Test_2()
     {
-        int             x   = 10;
-        const int       cx  = 20;
-        const int&      rx1 = x;
-        const int&      rx2 = cx;
-        const int&      rx3 = 9;
+        int x = 10;
+        const int cx = 20;
+        const int &rx1 = x;
+        const int &rx2 = cx;
+        const int &rx3 = 9;
     }
 
     void Test_3()
     {
-        int&& ry = 200;
+        int &&ry = 200;
 
-        int     x   = 20;
+        int x = 20;
         //int&&   rrx1 = x;     // error, x is a left value
-        int&&   rrxx = 20;
+        int &&rrxx = 20;
         //const int&& rrx = x;  // error, x is a left value
     }
 
     void Test_4()
     {
-        int     x   = 20;
-        int&&   rx = x * 2;
-        int     y = rx + 2;
-        rx        = 100;
+        int x = 20;
+        int &&rx = x * 2;
+        int y = rx + 2;
+        rx = 100;
     }
-}
+} // namespace ns_test1
 
 namespace ns_test2
 {
-    void fun(int& lref)
+    void fun(int &lref)
     {
         std::cout << "l-value reference\n";
     }
-    void fun(int&& lref)
+    void fun(int &&lref)
     {
         std::cout << "r-value reference\n";
     }
 
-    void fun(const int& clref)
+    void fun(const int &clref)
     {
         std::cout << "l-value const reference\n";
     }
 
     void Test_1()
     {
-        int     x = 10;
+        int x = 10;
         fun(x);
         fun(20);
     }
@@ -202,91 +201,91 @@ namespace ns_test2
     {
         Test_1();
     }
-}
+} // namespace ns_test2
 
 namespace ns_test3
 {
     template <typename T>
-        class DynArray
+    class DynArray
+    {
+    public:
+        explicit DynArray(int size)
+            : m_size(size), m_array{new T[size]}
         {
-            public:
-                explicit DynArray(int size)
-                    : m_size(size), m_array{new T[size]}
-                {
-                    std::cout << "Constructor: dyn array is created\n";
-                }
+            std::cout << "Constructor: dyn array is created\n";
+        }
 
-                virtual ~DynArray()
-                {
-                    delete[] m_array;
-                    std::cout << "Destructor: dyn array is destroyed\n";
-                }
+        virtual ~DynArray()
+        {
+            delete[] m_array;
+            std::cout << "Destructor: dyn array is destroyed\n";
+        }
 
-                DynArray(const DynArray& rhs) 
-                    : m_size{rhs.m_size}
-                {
-                    m_array = new T[m_size];
-                    for (int i = 0; i < m_size; i++)
-                        m_array[i] = rhs.m_array[i];
-                    std::cout << "Copy constructor: dyn array is created\n";
-                }
+        DynArray(const DynArray &rhs)
+            : m_size{rhs.m_size}
+        {
+            m_array = new T[m_size];
+            for (int i = 0; i < m_size; i++)
+                m_array[i] = rhs.m_array[i];
+            std::cout << "Copy constructor: dyn array is created\n";
+        }
 
-                DynArray& operator = (const DynArray& rhs)
-                {
-                    std::cout << "Copy assignment operator is called\n";
-                    if (this == &rhs)
-                        return *this;
+        DynArray &operator=(const DynArray &rhs)
+        {
+            std::cout << "Copy assignment operator is called\n";
+            if (this == &rhs)
+                return *this;
 
-                    delete[] m_array;
-                    m_size = rhs.m_size;
-                    m_array = new T[m_size];
-                    for (int i = 0; i < m_size; i++)
-                        m_array[i] = rhs.m_array[i];
+            delete[] m_array;
+            m_size = rhs.m_size;
+            m_array = new T[m_size];
+            for (int i = 0; i < m_size; i++)
+                m_array[i] = rhs.m_array[i];
 
-                    return *this;
-                }
+            return *this;
+        }
 
-                DynArray(DynArray&& rhs)
-                    :m_size(rhs.m_size), m_array{rhs.m_array}
-                {
-                    rhs.m_size = 0;
-                    rhs.m_array = nullptr;
-                    std::cout << "Move constructor: dyn array is moved\n";
-                }
+        DynArray(DynArray &&rhs)
+            : m_size(rhs.m_size), m_array{rhs.m_array}
+        {
+            rhs.m_size = 0;
+            rhs.m_array = nullptr;
+            std::cout << "Move constructor: dyn array is moved\n";
+        }
 
-                DynArray& operator = (DynArray&& rhs)
-                {
-                    std::cout << "Move assignment operator is called\n";
-                    if (this == &rhs)
-                        return *this;
-                    delete []m_array;
-                    m_size = rhs.m_size;
-                    m_array = rhs.m_array;
-                    rhs.m_size = 0;
-                    rhs.m_array = nullptr;
+        DynArray &operator=(DynArray &&rhs)
+        {
+            std::cout << "Move assignment operator is called\n";
+            if (this == &rhs)
+                return *this;
+            delete[] m_array;
+            m_size = rhs.m_size;
+            m_array = rhs.m_array;
+            rhs.m_size = 0;
+            rhs.m_array = nullptr;
 
-                    return *this;
-                }
+            return *this;
+        }
 
-                T& operator [](int idx)
-                {
-                    return m_array[idx];
-                }
+        T &operator[](int idx)
+        {
+            return m_array[idx];
+        }
 
-                const T& operator [](int idx) const
-                {
-                    return m_array[idx];
-                }
+        const T &operator[](int idx) const
+        {
+            return m_array[idx];
+        }
 
-                int size()  const
-                {
-                    return m_size;
-                }
+        int size() const
+        {
+            return m_size;
+        }
 
-            private:
-                T* m_array;
-                int m_size;
-        };
+    private:
+        T *m_array;
+        int m_size;
+    };
 
     DynArray<int> arrayFactory(int size)
     {
@@ -301,71 +300,80 @@ namespace ns_test3
         }
         return;
     }
-}
+} // namespace ns_test3
 
 namespace ns_test4
 {
 
 #define __PRINT__ std::cout << "func:" << __func__ << ":" << __LINE__ << "--idx: " << idx << std::endl;
 
-
     class Base1
     {
-        public:
-            Base1(int i) : idx(i)  {   
-                std::cout << "cons Base1 idx:" << idx << std::endl;
-            }
-            ~Base1() {   
-                std::cout << "des Base1 idx:" << idx << std::endl; 
-            }
-            Base1(const Base1& h) : idx(h.idx)   {
-                std::cout << "copy cons Base1 idx:" << idx << std::endl; 
-            }
-            Base1& operator=(const Base1& h){
-                idx = h.idx;
-                std::cout << "assigned Base1 idx:" << idx << std::endl; 
-            }
+    public:
+        Base1(int i) : idx(i)
+        {
+            std::cout << "cons Base1 idx:" << idx << std::endl;
+        }
+        ~Base1()
+        {
+            std::cout << "des Base1 idx:" << idx << std::endl;
+        }
+        Base1(const Base1 &h) : idx(h.idx)
+        {
+            std::cout << "copy cons Base1 idx:" << idx << std::endl;
+        }
+        Base1 &operator=(const Base1 &h)
+        {
+            idx = h.idx;
+            std::cout << "assigned Base1 idx:" << idx << std::endl;
+        }
 
-            int idx; 
-    }; 
+        int idx;
+    };
     class Base2
     {
-        public:
-            Base2(int i) : idx(i) {   
-                std::cout << "cons Base2 idx:" << idx << std::endl; 
-            }
-            Base2(const Base2& i) : idx(i.idx){
-                idx = i.idx;
-                std::cout << "copy idx:" << idx << std::endl; 
-            }
-            Base2(const Base2&& i) : idx(i.idx) {  
-                std::cout << "move idx:" << idx << std::endl; 
-            }
-            Base2& operator=(const Base2& h) {
-                idx = h.idx;
-                std::cout << "assigned Base2 idx:" << idx << std::endl; 
-                return *this;
-            }
-            Base2& operator=(const Base2&& h){
-                std::cout << "move assigned Base2 idx:" << idx << std::endl; 
-                return *this;
-            }
-            ~Base2() { 
-                std::cout << "des idx:" << idx << std::endl; 
-            }
+    public:
+        Base2(int i) : idx(i)
+        {
+            std::cout << "cons Base2 idx:" << idx << std::endl;
+        }
+        Base2(const Base2 &i) : idx(i.idx)
+        {
+            idx = i.idx;
+            std::cout << "copy idx:" << idx << std::endl;
+        }
+        Base2(const Base2 &&i) : idx(i.idx)
+        {
+            std::cout << "move idx:" << idx << std::endl;
+        }
+        Base2 &operator=(const Base2 &h)
+        {
+            idx = h.idx;
+            std::cout << "assigned Base2 idx:" << idx << std::endl;
+            return *this;
+        }
+        Base2 &operator=(const Base2 &&h)
+        {
+            std::cout << "move assigned Base2 idx:" << idx << std::endl;
+            return *this;
+        }
+        ~Base2()
+        {
+            std::cout << "des idx:" << idx << std::endl;
+        }
 
-            int idx; 
-    }; 
+        int idx;
+    };
 
-#define MAX_LOOP       10 
+#define MAX_LOOP 10
     void Test_1()
     {
         FUNCTIME;
         std::cout << "ns_test4::Test_1 =====================\n";
-        std::vector<Base1>  uVec;
+        std::vector<Base1> uVec;
         for (int i = 0; i < MAX_LOOP; i++)
         {
-            std::cout << "loop: " << i << ", size:" <<uVec.size() << "/" << uVec.capacity() << std::endl;
+            std::cout << "loop: " << i << ", size:" << uVec.size() << "/" << uVec.capacity() << std::endl;
             uVec.push_back(Base1(i));
         }
         std::cout << "ns_test4::Test_1 END=====================\n";
@@ -375,15 +383,15 @@ namespace ns_test4
     {
         FUNCTIME;
         std::cout << "ns_test4::Test_2 =====================\n";
-        std::vector<Base2>  uVec;
+        std::vector<Base2> uVec;
         for (int i = 0; i < MAX_LOOP; i++)
         {
-            std::cout << "loop: " << i << ", size:" <<uVec.size() << "/" << uVec.capacity() << std::endl;
+            std::cout << "loop: " << i << ", size:" << uVec.size() << "/" << uVec.capacity() << std::endl;
             uVec.push_back(std::move(Base2(i)));
         }
         std::cout << "ns_test4::Test_1 END=====================\n";
     }
-}
+} // namespace ns_test4
 
 namespace ns_stringstream
 {
@@ -391,8 +399,8 @@ namespace ns_stringstream
     {
         int i = 100;
     };
-    
-    ostream& operator << (ostream& s, const ATest& a)
+
+    ostream &operator<<(ostream &s, const ATest &a)
     {
         s << a.i;
         return s;
@@ -401,7 +409,7 @@ namespace ns_stringstream
     struct BTest
     {
         int i = 1000;
-        friend ostream& operator << (ostream& s, const BTest& a)
+        friend ostream &operator<<(ostream &s, const BTest &a)
         {
             s << a.i;
             return s;
@@ -417,11 +425,11 @@ namespace ns_stringstream
         std::cout << s << std::endl;
     }
 
-}
+} // namespace ns_stringstream
 
 namespace ns_test_emplace
 {
-    // 1、一个容器从另外一个容器 emplace 数据， 另外一个容器中的内容是否为空 ? 
+    // 1、一个容器从另外一个容器 emplace 数据， 另外一个容器中的内容是否为空 ?
     // 2、使用-fno-elide-constructors前后区别
     // 3、是否使用move construction的区别
     // 4、容器中元素序列化成字符串输出
@@ -429,26 +437,26 @@ namespace ns_test_emplace
 
     class Pointer
     {
-        public:
-            Pointer(int a) : poi(a) {}
-            int poi = 100;
+    public:
+        Pointer(int a) : poi(a) {}
+        int poi = 100;
     };
 
     class A
     {
-        public:
-            A(int i, Pointer* ap) : a(i), point(ap) {   PRINT_LINE; };
-            ~A()    {   PRINT_LINE;}
+    public:
+        A(int i, Pointer *ap) : a(i), point(ap) { PRINT_LINE; };
+        ~A() { PRINT_LINE; }
 
-            friend ostream& operator << (ostream& s, const A& a)
-            {
-                s << a.a << " - "<< (a.point != nullptr ? a.point->poi : 200000);
-                return s;
-            }
+        friend ostream &operator<<(ostream &s, const A &a)
+        {
+            s << a.a << " - " << (a.point != nullptr ? a.point->poi : 200000);
+            return s;
+        }
 
-        private:
-            int a = 100;
-            Pointer* point = nullptr;
+    private:
+        int a = 100;
+        Pointer *point = nullptr;
     };
 
     void test_1()
@@ -463,7 +471,7 @@ namespace ns_test_emplace
         std::cout << "-----------------------------------------\n";
         for (int i = 0; i < aVec.size(); i++)
             bVec.emplace_back(aVec[i]);
-        
+
         std::cout << "after move to bVec -----------------------------------------\n";
         PrintSeqCont(aVec, "12");
 
@@ -473,38 +481,39 @@ namespace ns_test_emplace
 
     class B
     {
-        public:
-            B(int i, Pointer* ap) : a(i), point(ap) { PRINT_FUNC("B construction ")  };
-            ~B()    {   PRINT_FUNC("B destruction");   }
-            B(const B& b) : a(b.a), point(b.point)  {   PRINT_FUNC("copy construction ");   }
-            B& operator=(const B& b)    
-            {
-                a = b.a;
-                point = b.point;
-                PRINT_FUNC("assign construction");
-            }
+    public:
+        B(int i, Pointer *ap) : a(i), point(ap){PRINT_FUNC("B construction ")};
+        ~B() { PRINT_FUNC("B destruction"); }
+        B(const B &b) : a(b.a), point(b.point) { PRINT_FUNC("copy construction "); }
+        B &operator=(const B &b)
+        {
+            a = b.a;
+            point = b.point;
+            PRINT_FUNC("assign construction");
+        }
 
-            B(B&& b) : a(b.a), point(b.point)
-            {
-                b.point = nullptr;
-                PRINT_FUNC("move construction");
-            }
-            B&& operator = (B&& b)
-            {
-                a = b.a;
-                point = b.point;
-                b.point = nullptr;
-                PRINT_FUNC("assgin move construction");
-            }
+        B(B &&b) : a(b.a), point(b.point)
+        {
+            b.point = nullptr;
+            PRINT_FUNC("move construction");
+        }
+        B &&operator=(B &&b)
+        {
+            a = b.a;
+            point = b.point;
+            b.point = nullptr;
+            PRINT_FUNC("assgin move construction");
+        }
 
-            friend ostream& operator << (ostream& s, const B& a)
-            {
-                s << a.a << " - "<< (a.point != nullptr ? a.point->poi : 200000);
-                return s;
-            }
-        private:
-            int a = 100;
-            Pointer* point = nullptr;
+        friend ostream &operator<<(ostream &s, const B &a)
+        {
+            s << a.a << " - " << (a.point != nullptr ? a.point->poi : 200000);
+            return s;
+        }
+
+    private:
+        int a = 100;
+        Pointer *point = nullptr;
     };
 
     void test_2()
@@ -519,14 +528,14 @@ namespace ns_test_emplace
         std::cout << "-----------------------------------------\n";
         for (int i = 0; i < srcVec.size(); i++)
             destVec.emplace_back(srcVec[i]);
-        
+
         std::cout << "after move to destVec -----------------------------------------\n";
         PrintSeqCont(srcVec, "12");
 
         std::cout << "destVec -----------------------------------------\n";
         PrintSeqCont(destVec, "12");
     }
-}
+} // namespace ns_test_emplace
 
 int main()
 {
