@@ -1,0 +1,28 @@
+FROM ubuntu
+
+ENV DEBIAN_FRONTEND noninteractive
+
+MAINTAINER rickypc@yeah.net
+
+
+RUN apt-get update \
+        && apt-get install --assume-yes apt-utils -y \
+        && apt-get install vim -y \
+        && apt-get install wget -y \
+        && apt-get install build-essential -y \
+        && apt-get install golang-go -y \
+        && apt-get install net-tools -y \
+        && apt-get install tzdata -y \
+        && ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime \
+        && dpkg-reconfigure -f noninteractive tzdata \
+        && apt-get install cmake -y \
+        && echo "Asia/Shanghai" > /etc/timezone;dpkg-reconfigure -f noninteractive tzdata
+
+VOLUME /CppCode
+VOLUME /GoCode
+
+EXPOSE 22
+
+WORKDIR /
+
+CMD ["/bin/bash"]
