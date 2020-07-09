@@ -183,6 +183,7 @@ namespace ns_test2
         Stack<std::string> &operator=(const Stack<std::string> &)
         {
             // todo...
+            return *this;
         }
 
         void push(std::string const &);
