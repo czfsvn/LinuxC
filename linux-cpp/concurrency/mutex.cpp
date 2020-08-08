@@ -118,7 +118,7 @@ namespace ns_dead_lock
                     std::lock_guard<std::mutex> g1(push_mtx);
                     //std::lock_guard<std::mutex> g2(pop_mtx);
                     std::cout << "push1: " << idx << std::endl;
-                    uVec.emplace_back(idx);
+                    uVec.push_back(idx);
                 }
             }
             
@@ -195,8 +195,8 @@ namespace ns_dead_lock
 
 int main()
 {
-    ns_m1::main();
-    //ns_dead_lock::main();
+    //ns_m1::main();
+    ns_dead_lock::main();
     LINE;
     std::cout << "Hello\n";
     return 0;
