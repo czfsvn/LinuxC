@@ -1,7 +1,7 @@
-#include <iostream>
-#include <unistd.h>
 #include <fcntl.h>
+#include <iostream>
 #include <sys/stat.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -53,8 +53,8 @@ namespace ns_daemon2
                 dup(0);
                 dup(0);
             }
-
             umask(0);
+
             return;
         }
     }
@@ -68,6 +68,7 @@ namespace ns_daemon2
             sleep(1);
         }
     }
+
 } // namespace ns_daemon2
 
 int main()
