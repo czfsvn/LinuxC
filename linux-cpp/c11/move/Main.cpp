@@ -546,6 +546,74 @@ namespace ns_test_emplace
     }
 }  // namespace ns_test_emplace
 
+namespace ns_move_bigobj
+{
+#define MAX_SIZE 1000
+#define ELEMENT_SIZE 1000
+    struct PakcetObj
+    {
+        uint32_t uniq_key = 0;
+        uint32_t char_id = 0;
+        std::string name = "";
+        uint32_t country = 0;
+        uint32_t money = 0;
+        uint32_t time_stamp = 0;
+
+        std::map<uint32_t, uint32_t> obj_map = {};
+        std::set<uint32_t> tmp_sets = {};
+        std::map<uint32_t, uint32_t> user_map = {};
+    };
+
+    void test_emplace(uint16_t type)
+    {
+        FUNCTIME;
+        std::map<uint32_t, PakcetObj> obj_map;
+        for (uint32_t i = 0; i < MAX_SIZE; i++)
+        {
+            PakcetObj tmp;
+            tmp.uniq_key = i;
+            tmp.char_id = i;
+            tmp.country = i;
+            tmp.money = i;
+            tmp.time_stamp = time(nullptr);
+            tmp.name = "abc" + i;
+
+            for (uint32_t idx = 0; idx < ELEMENT_SIZE; idx++)
+            {
+                tmp.tmp_sets.emplace(idx);
+                tmp.user_map.emplace(idx, 0);
+                tmp.obj_map.emplace(idx, 0);
+            }
+
+            if (type == 1)
+            {
+                obj_map.insert(std::make_pair(i, tmp));
+            }
+            else if (type == 2)
+            {
+                obj_map.insert(std::make_pair(i, std::move(tmp)));
+            }
+            else if (type == 3)
+            {
+                obj_map.emplace(i, tmp);
+            }
+            else if (type == 4)
+            {
+                obj_map.emplace(i, std::move(tmp));
+            }
+        }
+    }
+
+    void main()
+    {
+        test_emplace(1);
+        test_emplace(2);
+        test_emplace(3);
+        test_emplace(4);
+    }
+
+} // namespace ns_move_bigobj
+
 int main()
 {
     /*

@@ -8,17 +8,17 @@ class LogMessage;
 
 class LogFinisher
 {
-    public:
-        void operator = (LogMessage& other);
+public:
+    void operator=(LogMessage &other);
 };
 
-class LogMessage 
+class LogMessage
 {
-    public:
-        LogMessage(int level);
-        ~LogMessage();
+public:
+    LogMessage(int level);
+    ~LogMessage();
 
-        /*
+    /*
         LogMessage& operator<<(const std::string& value);
         LogMessage& operator<<(const char* value);
         LogMessage& operator<<(char value);
@@ -35,23 +35,21 @@ class LogMessage
         //LogMessage& operator<<(const uint128& value);
         */
 
-        template <typename T>
-            LogMessage& operator<<(T val)
-            {
-                oss << val;
-                return *this;
-            }
+    template <typename T>
+    LogMessage &operator<<(T val)
+    {
+        oss << val;
+        return *this;
+    }
 
+private:
+    friend class LogFinisher;
+    void Finish();
 
-    private:
-        friend class LogFinisher;
-        void Finish();
+    int level_;
+    std::string message_;
 
-        int level_;
-        std::string message_;
-
-        std::ostringstream oss;
+    std::ostringstream oss;
 };
-
 
 #endif
