@@ -1,7 +1,10 @@
 #include <algorithm>
 #include <iostream>
+<<<<<<< HEAD
 #include <map>
 #include <set>
+=======
+>>>>>>> 9458263f697e019fdcde7c3216c9c2dc2ddd340c
 #include <time.h>
 #include <vector>
 
@@ -493,11 +496,19 @@ namespace ns_test_emplace
             PRINT_FUNC("B destruction");
         }
         B(const B& b) : a(b.a), point(b.point)
+<<<<<<< HEAD
         {
             PRINT_FUNC("copy construction ");
         }
         B& operator=(const B& b)
         {
+=======
+        {
+            PRINT_FUNC("copy construction ");
+        }
+        B& operator=(const B& b)
+        {
+>>>>>>> 9458263f697e019fdcde7c3216c9c2dc2ddd340c
             a     = b.a;
             point = b.point;
             PRINT_FUNC("assign construction");
@@ -633,9 +644,13 @@ int main()
     // ns_test4::Test_1();
     // ns_test4::Test_2();
     // ns_stringstream::test_1();
+<<<<<<< HEAD
     // ns_test_emplace::test_2();
 
     ns_move_bigobj::main();
+=======
+    ns_test_emplace::test_2();
+>>>>>>> 9458263f697e019fdcde7c3216c9c2dc2ddd340c
 
     return 0;
 }
