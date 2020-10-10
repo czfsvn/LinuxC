@@ -7,6 +7,7 @@ Language: Cpp
 # Force pointers to the type for C++.
 AccessModifierOffset: -4
 AlignAfterOpenBracket:	Align
+AlignConsecutiveMacros: true
 AlignConsecutiveAssignments:	true
 AlignConsecutiveDeclarations:	true
 AlignEscapedNewlinesLeft:	true
@@ -37,6 +38,7 @@ BraceWrapping:
     BeforeCatch: true
     BeforeElse: true
     IndentBraces: false
+    
 
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
@@ -94,7 +96,7 @@ SpacesInAngles: false
 SpacesInContainerLiterals: true
 SpacesInCStyleCastParentheses: true
 SpacesInParentheses: false
-SpacesInSquareBrackets: true
+SpacesInSquareBrackets: false
 Standard: Auto
 TabWidth: 4
 UseTab:	Never
