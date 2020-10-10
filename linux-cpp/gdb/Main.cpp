@@ -22,7 +22,7 @@ using namespace std;
 #define MAX(x, y) (x) > (y) ? (x) : (y)
 
 namespace ns_test1
-{
+{ 
     /*
         可以动态打印变量：在GDB的时候打印变量的数值，
         

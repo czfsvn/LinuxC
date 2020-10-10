@@ -4,10 +4,10 @@
 #include <poll.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/inotify.h>
-#include <unistd.h>
 #include <string.h>
 #include <sys/epoll.h>
+#include <sys/inotify.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -212,7 +212,7 @@ namespace ns_test1
 } // namespace ns_test1
 
 namespace ns_test2
-{ // fromï¼š https: //blog.csdn.net/nicai888/article/details/60954210
+{ // fromï¼? https: //blog.csdn.net/nicai888/article/details/60954210
 
 #define NAME_MAX 100
 #define BUF_LEN (10 * sizeof(struct inotify_event) + NAME_MAX + 1)
@@ -242,7 +242,7 @@ namespace ns_test2
         while (1)
         {
             ssize_t len, i = 0;
-            /* read BUF_LEN bytesâ€™ worth of events */
+            /* read BUF_LEN bytesâ€? worth of events */
             len = read(fd, buf, BUF_LEN);
             /* loop over every read event until none remain */
             while (i < len)
