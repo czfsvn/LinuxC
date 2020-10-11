@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -26,29 +27,29 @@ namespace ns_std_sort
         {
             oss << "(" << item.user_id << "-" << item.score << ")";
         }
-        std::cout << "\nprint_ele : " << oss.str() << std::endl;
+        std::cout << "print_ele : " << oss.str() << std::endl;
     }
 
     void test1()
     {
         std::vector<Entry> vec;
 
-        for (uint32_t idx = 0; idx < 16; idx++)
+        for (uint32_t idx = 0; idx < 20; idx++)
         {
             Entry entry(idx);
             entry.score = 1000;
             vec.emplace_back(std::move(entry));
         }
 
-        vec[ 5 ].score = 111111;
-        vec[ 6 ].score = 111111;
+        vec[5].score = 111111;
+        vec[6].score = 111111;
         print_ele(vec);
         std::sort(vec.begin(), vec.end(), cmp);
         print_ele(vec);
         std::sort(vec.begin(), vec.end(), cmp);
         print_ele(vec);
-        std::sort(vec.begin(), vec.end(), cmp);
-        print_ele(vec);
+        // std::sort(vec.begin(), vec.end(), cmp);
+        // print_ele(vec);
     }
 
     void main()
@@ -57,6 +58,12 @@ namespace ns_std_sort
     }
 
 }  // namespace ns_std_sort
+
+namespace ns_quick_sort
+{
+    void quick_sort(std::vector<uint32_t>& vec) {}
+    void main() {}
+}  // namespace ns_quick_sort
 
 int main()
 {

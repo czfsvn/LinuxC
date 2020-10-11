@@ -20,7 +20,6 @@ int main()
 {
     MyClass* pMyClass =new MyClass;
     pMyClass->~MyClass();
-    pMyClass->MyClass::MyClass();
+    //pMyClass->MyClass::MyClass();
     delete pMyClass;
-
 }
