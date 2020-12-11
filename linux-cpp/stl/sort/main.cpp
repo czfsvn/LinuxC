@@ -34,7 +34,7 @@ namespace ns_std_sort
     {
         std::vector<Entry> vec;
 
-        for (uint32_t idx = 0; idx < 20; idx++)
+        for (uint32_t idx = 0; idx < 40; idx++)
         {
             Entry entry(idx);
             entry.score = 1000;
@@ -59,14 +59,71 @@ namespace ns_std_sort
 
 }  // namespace ns_std_sort
 
+namespace ns_base
+{
+    std::vector<uint32_t> uint32_vector()
+    {
+        std::vector<uint32_t> vec = { 36, 66, 2, 15, 6, 81, 6, 9 };
+        return vec;
+    }
+
+    void print_vec(const std::vector<uint32_t>& vec)
+    {
+        std::stringstream oss;
+        oss << "(";
+        for (const auto& item : vec)
+        {
+            oss << item << ",";
+        }
+        oss << ")";
+        std::cout << oss.str() << std::endl;
+    }
+}  // namespace ns_base
+
 namespace ns_quick_sort
 {
-    void quick_sort(std::vector<uint32_t>& vec) {}
-    void main() {}
+    void quick_sort(std::vector<uint32_t>& vec, const uint32_t low, const uint32_t high)
+    {
+        uint32_t       pos     = low;
+        const uint32_t pivot   = vec[0];
+        bool           success = false;
+        for (uint32_t index = high; index >= 0; index--)
+        {
+            if (vec[index] > pivot)
+                continue;
+
+            vec[low]   = vec[index];
+            vec[index] = pivot;
+            pos        = index;
+            success    = true;
+            break;
+        }
+        for (uint32_t idx = 0; idx < vec.size(); idx++)
+        {
+            if (vec[idx] < vec[pos])
+                continue;
+
+            vec[pos] = vec[idx];
+            vec[idx] = pivot;
+            success  = true;
+            break;
+        }
+        if (!success)
+            return;
+
+        quick_sort(vec, 0, vec.size());
+    }
+    void main()
+    {
+        std::vector<uint32_t> vec = ns_base::uint32_vector();
+        quick_sort(vec, 0, vec.size());
+        ns_base::print_vec(vec);
+    }
 }  // namespace ns_quick_sort
 
 int main()
 {
-    ns_std_sort::main();
+    // ns_std_sort::main();
+    ns_quick_sort::main();
     return 0;
 }
