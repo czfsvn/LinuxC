@@ -19,7 +19,7 @@ class ScopedThread
                 throw std::logic_error("No thread");
         }   
         ~ScopedThread() 
-        {   
+        {   \
             thrd.join();  
         }
         ScopedThread(const ScopedThread&)   = delete;
@@ -30,14 +30,14 @@ class ScopedThread
 
 void sleep_for()
 {
-    //std::this_thread::sleep_for(std::chrono::milliseconds(1000)); //c++11 可以用
-    std::this_thread::sleep_for(1s);    // c++14 以后可以这样用
-    std::this_thread::sleep_for(1000ms);    // c++14 以后可以这样用
-    std::this_thread::sleep_for(1000ns);    // c++14 以后可以这样用
-    std::this_thread::sleep_for(1000us);    // c++14 以后可以这样用
-    //std::this_thread::sleep_for(1min);    // c++14 以后可以这样用
-    //std::this_thread::sleep_for(1h);    // c++14 以后可以这样用
-    //std::this_thread::sleep_for(1d);    // c++14 以后可以这样用
+    //std::this_thread::sleep_for(std::chrono::milliseconds(1000)); //c++11 �?以用
+    std::this_thread::sleep_for(1s);    // c++14 以后�?以这样用
+    std::this_thread::sleep_for(1000ms);    // c++14 以后�?以这样用
+    std::this_thread::sleep_for(1000ns);    // c++14 以后�?以这样用
+    std::this_thread::sleep_for(1000us);    // c++14 以后�?以这样用
+    //std::this_thread::sleep_for(1min);    // c++14 以后�?以这样用
+    //std::this_thread::sleep_for(1h);    // c++14 以后�?以这样用
+    //std::this_thread::sleep_for(1d);    // c++14 以后�?以这样用
 }
 
 namespace ns_m1
@@ -46,7 +46,7 @@ namespace ns_m1
     {
         public:
             void run1()
-            {   // 直接使用 lock 和 unlock 的时候容易造成不能配对使用的bug
+            {   // 直接使用 lock �? unlock 的时候�?�易造成不能配�?�使用的bug
                 mtx.lock();
                 LINE;
                 std::cout << "thread: " << std::this_thread::get_id() << std::endl;
@@ -56,7 +56,7 @@ namespace ns_m1
 
             void run2()
             {
-                // lock_guard 在构造的时候调用 mtx.lock(), 析构的时候调用 mtx.unlock()
+                // lock_guard 在构造的时候调�? mtx.lock(), 析构的时候调�? mtx.unlock()
                 std::lock_guard<std::mutex> guard(mtx);
                 LINE;
                 std::cout << "thread: " << std::this_thread::get_id() << std::endl;
@@ -65,8 +65,8 @@ namespace ns_m1
 
             void run3()
             {
-                // unique_lock 在构造的时候调用 mtx.lock(), 析构的时候调用 mtx.unlock()
-                // 提供了比std::lock_guard 更多的灵活性
+                // unique_lock 在构造的时候调�? mtx.lock(), 析构的时候调�? mtx.unlock()
+                // 提供了比std::lock_guard 更�?�的灵活�?
                 // 但是占用了更多的空间，比 std::lock_guard 略慢
                 std::unique_lock<std::mutex> guard(mtx);
                 LINE;
@@ -103,7 +103,7 @@ namespace ns_m1
 
     void main()
     {
-        // 三种实现方式达到相同的效果，推荐使用 std::lock_guard
+        // 三�?�实现方式达到相同的效果，推荐使�? std::lock_guard
         test_mutex();
         test_lock_guard();
         test_uniq_lock();
@@ -124,7 +124,7 @@ namespace ns_dead_lock
                     std::lock(push_mtx, pop_mtx);
                     uList.emplace_back(idx);
 
-                    // 使用lock 会尝试锁定两个或多个互斥元，要么两个都锁定，要么都不锁定
+                    // 使用lock 会尝试锁定两�?或�?�个互斥元，要么两个都锁定，要么都不锁定
                     push_mtx.unlock();
                     pop_mtx.unlock();
                 }
@@ -170,8 +170,8 @@ namespace ns_dead_lock
                     //std::lock_guard<std::mutex> g1(pop_mtx);
                     //std::lock_guard<std::mutex> g2(push_mtx);
                     // 以上与push1 一起配合造成死锁
-                    // 如果跟push1 一样的lock顺序就不会死锁
-                    // 始终使用相同的顺序锁定这两个互斥元
+                    // 如果跟push1 一样的lock顺序就不会�?�锁
+                    // 始终使用相同的顺序锁定这两个互斥�?
                     std::lock_guard<std::mutex> g1(push_mtx);
                     std::lock_guard<std::mutex> g2(pop_mtx);
                     if (uList.empty())
@@ -191,7 +191,7 @@ namespace ns_dead_lock
                     std::lock(push_mtx, pop_mtx);
                     std::lock_guard<std::mutex> push_lock(push_mtx, std::adopt_lock);
                     std::lock_guard<std::mutex> pop_lock(pop_mtx, std::adopt_lock);
-                    // std::adopt_lock 告知 std::lock_guard 对象该互斥元已被锁定，
+                    // std::adopt_lock 告知 std::lock_guard 对象该互斥元已�??锁定�?
                     // 在lock_guard构造函数中无需调用锁定
                     uList.emplace_back(idx);
                 }
@@ -222,9 +222,9 @@ namespace ns_dead_lock
                     std::lock(push_mtx, pop_mtx);
                     std::unique_lock<std::mutex> push_lock(push_mtx, std::adopt_lock);
                     std::unique_lock<std::mutex> pop_lock(pop_mtx, std::adopt_lock);
-                    // std::adopt_lock 告知 std::unique_lock 对象该互斥元已被锁定，
-                    // 在 unique_lock 构造函数中无需调用锁定
-                    // 而在 std::unique_lock 的析构函数中仍然需要调用unlock解锁定
+                    // std::adopt_lock 告知 std::unique_lock 对象该互斥元已�??锁定�?
+                    // �? unique_lock 构造函数中无需调用锁定
+                    // 而在 std::unique_lock 的析构函数中仍然需要调用unlock解锁�?
                     uList.emplace_back(idx);
                 }
             }
@@ -257,9 +257,9 @@ namespace ns_dead_lock
                     std::lock(push_lock, pop_lock);
 
                     // std::defer_lock 告知 std::unique_lock/std::lock_guard 
-                    // 对象该互斥元未被锁定，
+                    // 对象该互斥元�?�?锁定�?
                     // 需要在 unique_lock 构造函数中需调用锁定
-                    // 而在 std::unique_lock 的析构函数中仍然需要调用unlock解锁定
+                    // 而在 std::unique_lock 的析构函数中仍然需要调用unlock解锁�?
                     uList.emplace_back(idx);
                 }
             }
@@ -346,7 +346,7 @@ namespace ns_uniq
         LINE;
     }
     
-    // 成员函数 lock， unlock
+    // 成员函数 lock�? unlock
     void test1()
     {
         std::unique_lock<std::mutex> ulock(mtx);
@@ -365,65 +365,65 @@ namespace ns_uniq
     // 成员函数 release
     void test2()
     {
-        //返回它所管理的mutex对象指针，并释放所有权；
-            //也就是说，这个unique_lock和mutex不再有关系
-            //如果原来mutex对像处于加锁状态，你有责任接管过来并负责解锁。
-            //（release返回的是原始mutex的指针）
+        //返回它所管理的mutex对象指针，并释放所有权�?
+            //也就�?说，这个unique_lock和mutex不再有关�?
+            //如果原来mutex对像处于加锁状态，你有责任接�?�过来并负责解锁�?
+            //（release返回的是原�?�mutex的指针）
             // 测试
         std::unique_lock<std::mutex> sbguard(mtx);
         std::mutex *ptx = sbguard.release(); 
     }
 
-    // unique_lock 第二个参数：std::try_to_lock
+    // unique_lock �?二个参数：std::try_to_lock
     void test3()
     {
         //尝试用mutex的lock()去锁定这个mutex
-            //如果没有锁定成功，也会立即返回，并不会阻塞在那里；
+            //如果没有锁定成功，也会立即返回，并不会阻塞在那里�?
         //用这个try_to_lock的前提是你自己不能先lock
         std::unique_lock<std::mutex> sbguard(mtx, std::try_to_lock);
         if (sbguard.owns_lock())
             std::cout << "获得锁\n";
         else
-            std::cout << "获得锁失败\n";
+            std::cout << "获得锁失�?\n";
     }
 
-    // unique_lock 第二个参数：std::defer_lock
+    // unique_lock �?二个参数：std::defer_lock
     void test4()
     {
-        //尝试给互斥量加锁，
+        //尝试给互斥量加锁�?
             //如果拿不到锁，返回false,
-            //如果拿到了锁，返回true,这个函数是不阻塞的
+            //如果拿到了锁，返回true,这个函数�?不阻塞的
         std::unique_lock<std::mutex> sbguard(mtx, std::defer_lock);
         if (sbguard.try_lock())
             std::cout << "获得锁\n";
         else
-            std::cout << "获得锁失败\n";
+            std::cout << "获得锁失�?\n";
     }
 
-    // unique_lock 第二个参数：std::adopt_lock
+    // unique_lock �?二个参数：std::adopt_lock
     void test5()
     {
-        // mtx 先lock，然后在sbguard中不需要调用构造函数里的lock
-            // 但是析构函数仍然会自动调用 unlock 
+        // mtx 先lock，然后在sbguard�?不需要调用构造函数里的lock
+            // 但是析构函数仍然会自动调�? unlock 
         mtx.lock();
         std::unique_lock<std::mutex> sbguard(mtx, std::adopt_lock);
     }
 
 
-    //从函数中返回一个局部的unique_lock对象是可以的
+    //从函数中返回一�?局部的unique_lock对象�?�?以的
     std::unique_lock<std::mutex> rtn_unique_lock()
     {
         std::unique_lock<std::mutex> tmpguard(mtx);
         return tmpguard;
     }
 
-    // 转移unique_lock 的所有权
-        // unique_lock 可移动，不可复制
+    // �?移unique_lock 的所有权
+        // unique_lock �?移动，不�?复制
     void test6()
     {
         std::unique_lock<std::mutex> lock = rtn_unique_lock();
         
-        //std::unique_lock<std::mutex> lock2(lock); 调用非法，无法调用复制构造函数
+        //std::unique_lock<std::mutex> lock2(lock); 调用非法，无法调用�?�制构造函�?
 
         // 调用std::move 后， lock3 拥有 lock 的所有权，lock已经没有所有权
         std::unique_lock<std::mutex> lock3(std::move(lock));
@@ -553,7 +553,7 @@ namespace ns_call_once
 };
 
 namespace ns_shared_mutex
-{   // 单个线程独占式写，多个线程读的并发访问
+{   // 单个线程�?占式写，多个线程读的并发访问
     class DnsEntry  {};
 
     class DnsCache
@@ -580,7 +580,7 @@ namespace ns_shared_mutex
 
     void test1()
     {
-        // 测试一下中文
+        // 测试一下中�?
 
     }
 

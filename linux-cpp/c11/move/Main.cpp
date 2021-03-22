@@ -1,10 +1,7 @@
 #include <algorithm>
 #include <iostream>
-<<<<<<< HEAD
 #include <map>
 #include <set>
-=======
->>>>>>> 9458263f697e019fdcde7c3216c9c2dc2ddd340c
 #include <time.h>
 #include <vector>
 
@@ -214,7 +211,7 @@ namespace ns_test3
     class DynArray
     {
     public:
-        explicit DynArray(int size) : m_size(size), m_array{ new T[ size ] }
+        explicit DynArray(int size) : m_size(size), m_array{ new T[size] }
         {
             std::cout << "Constructor: dyn array is created\n";
         }
@@ -227,9 +224,9 @@ namespace ns_test3
 
         DynArray(const DynArray& rhs) : m_size{ rhs.m_size }
         {
-            m_array = new T[ m_size ];
+            m_array = new T[m_size];
             for (int i = 0; i < m_size; i++)
-                m_array[ i ] = rhs.m_array[ i ];
+                m_array[i] = rhs.m_array[i];
             std::cout << "Copy constructor: dyn array is created\n";
         }
 
@@ -241,9 +238,9 @@ namespace ns_test3
 
             delete[] m_array;
             m_size  = rhs.m_size;
-            m_array = new T[ m_size ];
+            m_array = new T[m_size];
             for (int i = 0; i < m_size; i++)
-                m_array[ i ] = rhs.m_array[ i ];
+                m_array[i] = rhs.m_array[i];
 
             return *this;
         }
@@ -271,12 +268,12 @@ namespace ns_test3
 
         T& operator[](int idx)
         {
-            return m_array[ idx ];
+            return m_array[idx];
         }
 
         const T& operator[](int idx) const
         {
-            return m_array[ idx ];
+            return m_array[idx];
         }
 
         int size() const
@@ -478,7 +475,7 @@ namespace ns_test_emplace
 
         std::cout << "-----------------------------------------\n";
         for (int i = 0; i < aVec.size(); i++)
-            bVec.emplace_back(aVec[ i ]);
+            bVec.emplace_back(aVec[i]);
 
         std::cout << "after move to bVec -----------------------------------------\n";
         PrintSeqCont(aVec, "12");
@@ -549,7 +546,7 @@ namespace ns_test_emplace
 
         std::cout << "-----------------------------------------\n";
         for (int i = 0; i < srcVec.size(); i++)
-            destVec.emplace_back(srcVec[ i ]);
+            destVec.emplace_back(srcVec[i]);
 
         std::cout << "after move to destVec -----------------------------------------\n";
         PrintSeqCont(srcVec, "12");

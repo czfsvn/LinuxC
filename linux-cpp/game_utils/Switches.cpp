@@ -4,7 +4,7 @@ bool Switches::Reg(Switch *sw)
 {
     if (!sw || sw->name.empty())
         return false;
-
+        
     switches_map.emplace(sw->name, sw);
 }
 bool Switches::Set(const std::string &name, int32_t value, const char *log /* = nullptr*/)

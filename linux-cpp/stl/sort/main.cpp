@@ -61,9 +61,11 @@ namespace ns_base
 
     bool cmp(const Entry& lhs, const Entry& rhs)
     {
+        if (lhs.score < rhs.score)
+            return lhs.score < rhs.score;
         // if (lhs.score != rhs.score)
-        return lhs.score > rhs.score;
-        // return lhs.user_id > rhs.user_id;
+        // return lhs.score > rhs.score;
+        return lhs.user_id > rhs.user_id;
     }
 
     std::ostream& operator<<(std::ostream& oss, const Entry& entry)
@@ -119,6 +121,13 @@ namespace ns_std_sort
     {
         std::vector<ns_base::Entry> vec = ns_base::gen_entry_vec();
         print_ele(vec);
+        for (uint32_t idx = 0; idx < 10; idx++)
+        {
+            std::sort(vec.begin(), vec.end(), ns_base::cmp);
+            print_ele(vec);
+            std::sort(vec.begin(), vec.end(), ns_base::cmp);
+            print_ele(vec);
+        }
         std::sort(vec.begin(), vec.end(), ns_base::cmp);
         print_ele(vec);
         std::sort(vec.begin(), vec.end(), ns_base::cmp);
@@ -509,9 +518,9 @@ namespace ns_bin_insert_sort
 
 int main()
 {
-    // ns_std_sort::main();
+    ns_std_sort::main();
     // ns_quick_sort::main();
     // ns_bubble_sort::main();
-    ns_insert_sort::main();
+    // ns_insert_sort::main();
     return 0;
 }

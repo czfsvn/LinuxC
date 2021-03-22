@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -g -O0")
 set(LIBS boost_system boost_filesystem crypto boost_iostreams)
 
-include_directories(/usr/local/include)
-#link_directories(${LIBS} /usr/local/lib)
+include_directories(/usr/local/include /usr/local/boost_1_75/include)
+link_directories(${LIBS} /usr/local/lib /usr/local/boost_1_75/lib)
 
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb -pg -fpermissive")
 
