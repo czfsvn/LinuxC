@@ -134,25 +134,31 @@ namespace threadpool_test
         pool_ptr_->addNewTask(std::make_shared<TestTask>(get_task_idx()));
         sleepfor_microseconds(10);
 
-        if (task_count++ >= 20)
-            stop();
+        // if (task_count++ >= 20)
+        //     stop();
     }
 
     void test()
     {
+        sleepfor_seconds(2);
         threadpool::TaskPoolPtr pool = std::make_shared<threadpool::TaskPool>(4);
         pool->init();
-        TestTaskThread* test_thrd = new TestTaskThread(pool);
-        test_thrd->start();
         pool->startAll();
+
+        TestTaskThread* test_thrd1 = new TestTaskThread(pool);
+        test_thrd1->start();
+
+        TestTaskThread* test_thrd2 = new TestTaskThread(pool);
+        test_thrd2->start();
 
         while (1)
         {
             pool->runInMain();
-            sleepfor_microseconds(100);
+            sleepfor_microseconds(5);
         }
 
-        test_thrd->join();
+        test_thrd1->join();
+        test_thrd2->join();
         pool->joinAll();
     }
 

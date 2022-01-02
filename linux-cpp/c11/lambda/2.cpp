@@ -10,9 +10,9 @@ bool istarget(const std::string& s, int sz)
 
 void Test_1()
 {
-    std::vector<string> v{"This","is","a","predicate","."};
-    auto isTarget = std::bind(istarget, _1, 2);
-    auto found = std::find_if(v.begin(), v.end(), isTarget);
+    std::vector<string> v{ "This", "is", "a", "predicate", "." };
+    auto                isTarget = std::bind(istarget, _1, 2);
+    auto                found    = std::find_if(v.begin(), v.end(), isTarget);
 }
 
 int main()

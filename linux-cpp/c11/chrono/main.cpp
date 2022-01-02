@@ -7,10 +7,10 @@ namespace ns_duration
 {
     void test1()
     {
-        std::chrono::milliseconds ms{3};
+        std::chrono::milliseconds ms{ 3 };
         std::chrono::microseconds us = 2 * ms;
 
-        std::chrono::duration<double, std::ratio<1, 30>> hz30{3.5};
+        std::chrono::duration<double, std::ratio<1, 30>> hz30{ 3.5 };
 
         std::cout << "3 ms duration has " << ms.count() << " ticks\n";
         std::cout << "6000 us duration has " << us.count() << " ticks\n";
@@ -31,7 +31,7 @@ namespace ns_duration
         test1();
         test2();
     }
-} // namespace ns_duration
+}  // namespace ns_duration
 
 namespace ns_time_point
 {
@@ -50,8 +50,8 @@ namespace ns_time_point
         using namespace std::chrono;
         system_clock::time_point now = system_clock::now();
 
-        // to_time_t    ½«Ò»¸ö  time_point    ×ª»»³É  ctime
-        // from_time_t  ½«Ò»¸ö  ctime         ×ª»»³É  time_point
+        // to_time_t    å°†ä¸€ä¸ª  time_point    è½¬æ¢æˆ  ctime
+        // from_time_t  å°†ä¸€ä¸ª  ctime         è½¬æ¢æˆ  time_point
         std::time_t last = system_clock::to_time_t(now - hours(24));
         std::time_t next = system_clock::to_time_t(now + hours(24));
 
@@ -64,7 +64,7 @@ namespace ns_time_point
         test1();
         test2();
     }
-} // namespace ns_time_point
+}  // namespace ns_time_point
 
 namespace ns_timer
 {
@@ -72,36 +72,49 @@ namespace ns_timer
     class Timer
     {
     public:
-        Timer() : begin(high_resolution_clock::now())
-        {
-        }
+        Timer() : begin(high_resolution_clock::now()) {}
 
         void reset()
         {
             begin = high_resolution_clock::now();
         }
 
-        // Ä¬ÈÏÊä³öºÁÃë
+        // é»˜è®¤è¾“å‡ºæ¯«ç§’
         template <typename Duartion = milliseconds>
         int64_t elapsed() const
         {
-            return duration_cast<Duartion>(high_resolution_clock::now - begin).count();
+            return duration_cast<Duartion>(high_resolution_clock::now() - begin).count();
         }
 
-        // Êä³öÎ¢Ãë
-        int64_t elapsed_micro() const { return elapsed<microseconds>(); }
+        // è¾“å‡ºå¾®ç§’
+        int64_t elapsed_micro() const
+        {
+            return elapsed<microseconds>();
+        }
 
-        // Êä³öÄÉÃë
-        int64_t elapsed_nano() const { return elapsed<nanoseconds>(); }
+        // è¾“å‡ºçº³ç§’
+        int64_t elapsed_nano() const
+        {
+            return elapsed<nanoseconds>();
+        }
 
-        // Êä³öÃë
-        int64_t elapsed_seconds() const { return elapsed<seconds>(); }
+        // è¾“å‡ºç§’
+        int64_t elapsed_seconds() const
+        {
+            return elapsed<seconds>();
+        }
 
-        // Êä³ö·Ö
-        int64_t elapsed_minutes() const { return elapsed<minutes>(); }
+        // è¾“å‡ºåˆ†
+        int64_t elapsed_minutes() const
+        {
+            return elapsed<minutes>();
+        }
 
-        // Êä³öÊ±
-        int64_t elapsed_hours() const { return elapsed<hours>(); }
+        // è¾“å‡ºæ—¶
+        int64_t elapsed_hours() const
+        {
+            return elapsed<hours>();
+        }
 
     private:
         time_point<high_resolution_clock> begin = {};
@@ -110,9 +123,7 @@ namespace ns_timer
     class BlockCost
     {
     public:
-        BlockCost(const char *func, uint32_t lines) : func_name(func), line(lines)
-        {
-        }
+        BlockCost(const char* func, uint32_t lines) : func_name(func), line(lines) {}
 
         ~BlockCost()
         {
@@ -121,14 +132,14 @@ namespace ns_timer
 
     private:
         std::string func_name = {};
-        uint32_t line = 0;
-        Timer timer = {};
+        uint32_t    line      = 0;
+        Timer       timer     = {};
     };
-} // namespace ns_timer
+}  // namespace ns_timer
 
 int main()
 {
-    //ns_duration::main();
+    // ns_duration::main();
     ns_time_point::main();
 
     std::cout << "Hello, chrono\n";

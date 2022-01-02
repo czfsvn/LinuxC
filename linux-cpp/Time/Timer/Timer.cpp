@@ -8,7 +8,7 @@ namespace ns_timer_node
     class TimerNode
     {
     public:
-        TimerNode(uint32_t id, uint32_t expired):timer_id(id), expired_sec(expired){}
+        TimerNode(uint32_t id, uint32_t expired) : timer_id(id), expired_sec(expired) {}
         void run()
         {
             std::cout << "timer_id: " << timer_id << ", now: " << time(NULL) << " run.\n";
@@ -20,19 +20,17 @@ namespace ns_timer_node
         }
 
     private:
-        uint32_t timer_id = 0;
+        uint32_t timer_id    = 0;
         uint32_t expired_sec = 0;
-
     };
-} // namespace ns_timer_node
-
+}  // namespace ns_timer_node
 
 namespace ns_timer_set
 {
     class TimerModule
     {
     public:
-        TimerModule(){}
+        TimerModule() {}
         void run()
         {
             const uint32_t now = time(NULL);
@@ -61,10 +59,10 @@ namespace ns_timer_set
 
     void main()
     {
-        uint32_t now = time(nullptr);
+        uint32_t    now = time(nullptr);
         TimerModule timer_module;
         std::cout << "main start: " << now << std::endl;
-        for (uint32_t idx = 0; idx < 10;idx++)
+        for (uint32_t idx = 0; idx < 10; idx++)
         {
             ns_timer_node::TimerNode* node = new ns_timer_node::TimerNode(idx, now + idx * 10);
             timer_module.addTimer(node);
@@ -72,12 +70,11 @@ namespace ns_timer_set
 
         while (1)
         {
-                 std::this_thread::sleep_for(1s);
+            std::this_thread::sleep_for(1s);
             timer_module.run();
         }
     }
-} // namespace ns_timer_set
-
+}  // namespace ns_timer_set
 
 int main()
 {

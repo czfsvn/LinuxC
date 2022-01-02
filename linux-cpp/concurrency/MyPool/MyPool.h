@@ -211,7 +211,6 @@ namespace helper
 
             {
                 std::unique_lock<std::mutex> lk(mutex_);
-
                 data_list_.emplace_back(std::forward<F>(data));
             }
         }
@@ -348,18 +347,26 @@ namespace threadpool_test
     class TestTask : public threadpool::Task
     {
     public:
-        TestTask(uint32_t idx) : task_id(idx) {}
+        TestTask(uint32_t idx) : task_id(idx)
+        {
+            std::cout << "test task thread: " << std::this_thread::get_id() << ", construct: " << task_id << std::endl;
+        }
+
+        ~TestTask()
+        {
+            std::cout << "test task thread: " << std::this_thread::get_id() << ", destruct: " << task_id << std::endl;
+        }
 
         virtual bool work()
         {
-            std::cout << "test task work: " << task_id << ", thread: " << std::this_thread::get_id() << std::endl;
+            std::cout << "test task thread: " << std::this_thread::get_id() << ", work: " << task_id << std::endl;
             sleepfor_microseconds(rnd_.Next() % 1000);
             return true;
         }
 
         virtual bool done()
         {
-            std::cout << "test task done: " << task_id << ", thread: " << std::this_thread::get_id() << std::endl;
+            std::cout << "test task thread: " << std::this_thread::get_id() << ", done: " << task_id << std::endl;
             sleepfor_microseconds(rnd_.Next() % 1000);
             return true;
         }

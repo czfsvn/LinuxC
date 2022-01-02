@@ -12,3 +12,4 @@ set(LIBS boost_system)
 
 #add_executable(main Main.cpp)
 add_subdirectory("${PROJECT_SOURCE_DIR}/snowflake")
+add_subdirectory("${PROJECT_SOURCE_DIR}/skiplist")

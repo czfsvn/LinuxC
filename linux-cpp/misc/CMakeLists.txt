@@ -14,4 +14,5 @@ add_executable(file_notify file_notify.cpp)
 add_executable(daemon daemon.cpp)
 add_executable(defer defer.cpp)
 add_executable(time time.cpp)
+add_executable(septwar septwar.cpp)
 

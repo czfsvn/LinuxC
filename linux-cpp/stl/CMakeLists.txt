@@ -10,7 +10,8 @@ set(LIBS boost_system)
 
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb -pg -fpermissive ")
 
-add_subdirectory("${PROJECT_SOURCE_DIR}/sort")
+#add_subdirectory("${PROJECT_SOURCE_DIR}/sort")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Container")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Construction")
 add_subdirectory("${PROJECT_SOURCE_DIR}/attribute")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Matcher")

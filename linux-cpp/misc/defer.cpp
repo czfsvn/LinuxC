@@ -1,76 +1,88 @@
-#include <iostream>
 #include <functional>
-
+#include <iostream>
 
 using namespace std;
-
 
 namespace ns_defer1
 {
     class defer
     {
         using OnDestructorAction = std::function<void()>;
+
     public:
         defer(OnDestructorAction action) : OnDestructor(action) {}
-        ~defer() { OnDestructor(); }
+        ~defer()
+        {
+            OnDestructor();
+        }
 
     protected:
         OnDestructorAction OnDestructor;
     };
-}
+}  // namespace ns_defer1
 
 namespace ns_defer2
 {
     class defer
     {
         using OnDestructorAction = std::function<void()>;
+
     public:
         defer(defer&) = delete;
         defer(OnDestructorAction action) : OnDestructor(action) {}
-        ~defer() { OnDestructor(); }
+        ~defer()
+        {
+            OnDestructor();
+        }
 
         defer operator=(defer&) = delete;
 
     protected:
         OnDestructorAction OnDestructor;
     };
-}
+}  // namespace ns_defer2
 
 namespace ns_defer3
 {
     class defer
     {
         using OnDestructorAction = std::function<void()>;
+
     public:
         defer(defer&) = delete;
         defer(OnDestructorAction action) : OnDestructor(action) {}
-        ~defer() { OnDestructor(); }
+        ~defer()
+        {
+            OnDestructor();
+        }
 
-        defer operator=(defer&) = delete;
+        defer operator=(defer&)    = delete;
         void* operator new(size_t) = delete;
 
     protected:
         OnDestructorAction OnDestructor;
     };
-}
+}  // namespace ns_defer3
 
 namespace ns_test
 {
     void fun(bool doit)
     {
-        ns_defer3::defer clean([]()
-                {
-                    std::cout << "clean" << std::endl;
-                });
+        ns_defer3::defer clean(
+            []()
+            {
+                std::cout << "clean" << std::endl;
+            });
         if (!doit)
         {
             std::cout << "! doit" << std::endl;
             return;
         }
-        ns_defer3::defer clean2([]()
-                {
-                    std::cout << "clean 2" << std::endl;
-                });
+        ns_defer3::defer clean2(
+            []()
+            {
+                std::cout << "clean 2" << std::endl;
+            });
         std::cout << "doit" << std::endl;
 
         return;
@@ -83,8 +95,7 @@ namespace ns_test
         std::cout << "\nfunc(true)" << std::endl;
         fun(true);
     }
-}
-
+}  // namespace ns_test
 
 int main()
 {

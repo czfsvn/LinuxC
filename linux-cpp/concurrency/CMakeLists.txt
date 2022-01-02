@@ -2,8 +2,12 @@ cmake_minimum_required(VERSION 2.8)
 
 project(concurrency)
 
+set(ASAN_CXXFLAGS "-fsanitize=address -fno-omit-frame-pointer ${ASAN_LEAK}")
+set(ASAN_LDFLAGS "-fsanitize=address -fno-omit-frame-pointer ${ASAN_LEAK}")
+
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -fpermissive -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ASAN_CXXFLAGS} -pthread -fpermissive -g")
+set(CMAKE_EXE_LINKER_FLAGS "${ASAN_LDFLAGS}")
 
 include_directories(/usr/local/include)
 set(LIBS pthread boost_system)
